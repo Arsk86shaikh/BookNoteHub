@@ -1,0 +1,229 @@
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+  rel="stylesheet"
+/>
+
+<%- include('header', { title: 'BookNote Hub' }) %>
+<main>
+    <section class="welcome-section">
+        <h1>Welcome to BookNote Hub!</h1>
+        <p>Your personal book library tracker and notes management system.</p>
+        <div class="image-gallery">
+            <% if (data.welcomeCards && data.welcomeCards.length) { %>
+                <% data.welcomeCards.forEach(card => { %>
+                    <div class="card">
+                        <a href="<%= card.link %>">
+                            <img src="<%= card.image %>" alt="<%= card.title %>">
+                            <h3><%= card.title %></h3>
+                        </a>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <p>No welcome cards available.</p>
+            <% } %>
+        </div>
+    </section>
+    
+</main>
+
+
+
+<script>
+    // JavaScript to handle button clicks
+    document.querySelectorAll('.offer-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const link = button.getAttribute('data-link');
+            if (link) {
+                window.location.href = link;
+            }
+        });
+    });
+</script>
+
+<section class="suggestions">
+    <h2>Reading Suggestions</h2>
+
+    <!-- Suggestion Card 1: Atomic Habits -->
+    <div class="suggestion-card">
+        <div class="book-cover-container">
+            <img src="https://images-na.ssl-images-amazon.com/images/I/51-uspgqWIL._SX328_BO1,204,203,200_.jpg" alt="Atomic Habits Book Cover" class="book-cover">
+        </div>
+        <div class="book-description">
+            <h3>Atomic Habits</h3>
+            <p>Atomic Habits by James Clear offers a proven framework for improving every day. No matter what your goals are, this book gives you the strategies to develop better habits, break bad ones, and master the tiny behaviors that lead to remarkable results.</p>
+            <ul class="positive-points">
+                <li><a href="https://jamesclear.com/atomic-habits-summary">Powerful insights on habit formation</a></li>
+                <li><a href="https://www.goodreads.com/book/show/40121378-atomic-habits">Practical strategies for personal growth</a></li>
+                <li><a href="https://blog.hubspot.com/marketing/atomic-habits-review">Actionable steps for positive change</a></li>
+            </ul>
+            <div class="buttons">
+                <button class="explore-btn"><a href="https://www.google.co.in/books/edition/Atomic_Habits/fFCjDQAAQBAJ?hl=en&gbpv=1&pg=PT12&printsec=frontcover">Open Pdf</a></button>
+                <button class="add-book-btn"><a>Add Book</a></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Suggestion Card 2: Don't Worry, Be Happy -->
+    <div class="suggestion-card">
+        <div class="book-cover-container">
+            <img src="https://books.google.co.in/books/publisher/content?id=8VmuEAAAQBAJ&pg=PP1&img=1&zoom=3&hl=en&bul=1&sig=ACfU3U0aQcaSC4IpSy2TQXgGBoFvBib9MA&w=1280" alt="Don't Worry, Be Happy Book Cover" class="book-cover">
+        </div>
+        <div class="book-description">
+            <h3>Don't Worry, Be Happy</h3>
+            <p>This uplifting book by John Doe teaches readers how to live worry-free by embracing positivity, mindfulness, and joy. Through inspiring stories and practical advice, it guides readers toward a happier, more peaceful life.</p>
+            <ul class="positive-points">
+                <li><a href="https://www.mindful.org/5-ways-to-be-happier/">Mindfulness practices for daily life</a></li>
+                <li><a href="https://positivepsychology.com/positive-thinking-books/">Positive thinking techniques</a></li>
+                <li><a href="https://www.psychologytoday.com/us/blog/the-moment-youth/201811/dont-worry-be-happy">Uplifting stories</a></li>
+            </ul>
+            <div class="buttons">
+                <button class="explore-btn"><a href="https://www.google.co.in/books/edition/Don_t_Worry_Be_Happy/8VmuEAAAQBAJ?hl=en&gbpv=1&pg=PP1&printsec=frontcover">Open Pdf</a></button>
+                <button class="add-book-btn"><a>Add Book</a></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Suggestion Card 3: The Way of Peace -->
+    <div class="suggestion-card">
+        <div class="book-cover-container">
+            <img src="https://m.media-amazon.com/images/I/81kNIZUR+jL._AC_UF1000,1000_QL80_.jpg" alt="The Way Of Peace Book Cover" class="book-cover">
+        </div>
+        <div class="book-description">
+            <h3>The Way Of Peace</h3>
+            <p>The Way of Peace by James Allen reflects the New Thought Movement, referencing Buddhism, Hinduism, and Christianity. It explores meditation as a pathway to divinity, emphasizing purity of thought for personal transformation and inner peace.</p>
+            <ul class="positive-points">
+                <li><a href="https://www.feedtheminds.org/wp-content/uploads/2014/09/STORYTELLING-English.pdf">Engaging storytelling</a></li>
+                <li><a href="https://www.johnshalom.com/wp-content/uploads/2023/09/2.-Your-Self-Improvement-Guide_FREE.pdf">Practical self-improvement tips</a></li>
+                <li><a href="https://www.richardcollison.net/lessons-peaceful-warrior/">Life lessons</a></li>
+            </ul>
+            <div class="buttons">
+                <button class="explore-btn"><a href="https://www.brainybetty.com/2007Motivation/James%20Allen%20-%20The%20Way%20of%20Peace.pdf">Open Pdf</a></button>
+                <button class="add-book-btn"><a>Add Book</a></button>
+            </div>
+        </div>
+    </div>
+    <div class="explore-more-container">
+        <button class="explore-more-btn">
+          <a href="/books" target="_blank">
+            <i class="fas fa-book-open"></i> Explore More Books <span class="arrow">→</span>
+          </a>
+        </button>
+      </div>
+      
+   
+</section>
+<!-- Corrected EJS Section -->
+<section class="offers">
+    <h2>Books Library Offers</h2>
+    <div class="offers-gallery">
+        <% if (data.offerCards && data.offerCards.length) { %>
+            <% data.offerCards.forEach(card => { %>
+                <div class="offer-card">
+                    <img src="<%= card.image %>" alt="<%= card.title %>" class="book-cover">
+                    <div class="offer-content">
+                        <h3><%= card.title %></h3>
+                        <p><%= card.description %></p>
+                        <a href="<%= card.viewLink %>" class="offer-btn">Explore Now</a>
+                    </div>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <p>No offers available at the moment.</p>
+        <% } %>
+    </div>
+</section>
+
+<section class="carousel-section">
+    <h2>Featured Books</h2>
+    <div class="carousel-container">
+      <button class="carousel-btn prev" id="prevBtn"><i class="fas fa-chevron-left"></i></button>
+      <div class="carousel" id="carousel">
+        <% if (data.featuredBooks && data.featuredBooks.length) { %>
+          <% data.featuredBooks.forEach(book => { %>
+            <div class="carousel-card">
+              <img src="<%= book.image %>" alt="<%= book.title %>">
+              <h3><%= book.title %></h3>
+              <p><%= book.description %></p>
+              <button class="explore-btn">
+                <a href="<%= book.link %>" target="_blank">Explore</a>
+              </button>
+            </div>
+          <% }) %>
+        <% } else { %>
+          <p>No featured books available at the moment.</p>
+        <% } %>
+      </div>
+      <button class="carousel-btn next" id="nextBtn"><i class="fas fa-chevron-right"></i></button>
+    </div>
+  </section>
+  
+  
+
+
+
+
+<script>
+    document.querySelector('.explore-btn').addEventListener('click', function() {
+        alert('Discover more details and reviews about this book!');
+        // Optionally, link to a new page with more details
+    });
+
+    document.querySelector('.add-book-btn').addEventListener('click', function() {
+        alert('This book has been successfully added to your collection!');
+        // Optionally, add functionality to add the book to a user's reading list
+
+    });
+
+    document.querySelector('.explore-more-btn').addEventListener('mouseover', () => {
+  document.querySelector('.arrow').style.marginLeft = '12px';
+});
+
+document.querySelector('.explore-more-btn').addEventListener('mouseout', () => {
+  document.querySelector('.arrow').style.marginLeft = '5px';
+});
+
+
+
+
+const carousel = document.querySelector('.carousel');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+
+let scrollAmount = 0;
+
+prevBtn.addEventListener('click', () => {
+  scrollAmount -= 320; // Adjust based on card width + gap
+  carousel.style.transform = `translateX(${-scrollAmount}px)`;
+  checkCarouselBounds();
+});
+
+nextBtn.addEventListener('click', () => {
+  scrollAmount += 320; // Adjust based on card width + gap
+  carousel.style.transform = `translateX(${-scrollAmount}px)`;
+  checkCarouselBounds();
+});
+
+function checkCarouselBounds() {
+  const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+  if (scrollAmount <= 0) {
+    scrollAmount = 0;
+    prevBtn.disabled = true;
+  } else {
+    prevBtn.disabled = false;
+  }
+  if (scrollAmount >= maxScroll) {
+    scrollAmount = maxScroll;
+    nextBtn.disabled = true;
+  } else {
+    nextBtn.disabled = false;
+  }
+}
+
+// Initial setup
+checkCarouselBounds();
+
+
+</script>
+
+
+<%- include('footer') %>

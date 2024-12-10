@@ -1,0 +1,119 @@
+<%- include('header', { title: 'Available Books' }) %>
+
+<link rel="stylesheet" href="/styles.css">
+
+<div class="container">
+    <h1>Available Books</h1>
+
+    <!-- Search Form -->
+    <form action="/books" method="GET" class="search-form">
+        <input type="text" name="title" placeholder="Search by title" class="search-input" required>
+        <button type="submit" class="search-button">Search</button>
+    </form>
+
+    <!-- Suggestions Section -->
+    <section class="suggestions">
+        <% if (books && books.length > 0) { %>
+            <% books.forEach(book => { %>
+                <div class="suggestion-card">
+                    <div class="book-cover-container">
+                        <img src="<%= book.coverImage %>" alt="Cover of <%= book.title %>" class="book-cover rotate">
+                    </div>
+                    <div class="book-description">
+                        <h3><%= book.title %></h3>
+                        <p><strong>Author:</strong> <%= book.author %></p>
+                        <p><strong>Published on:</strong> <%= book.publishDate %></p>
+                        <p><%= book.description %></p>
+                        <ul class="positive-points">
+                            <li><a href="<%= book.pdfLink || '#' %>" target="_blank">
+                                <%= book.pdfLink ? 'Open PDF' : 'No PDF available' %>
+                            </a></li>
+                        </ul>
+                        <div class="buttons">
+                            <% if (user) { %>
+                                <!-- If user is logged in, show the Add to Reading List button -->
+                                <form action="/readingList" method="POST" class="add-to-list-form">
+                                    <input type="hidden" name="bookId" value="<%= book.book_id %>">
+                                    <input type="hidden" name="title" value="<%= book.title %>">
+                                    <input type="hidden" name="author" value="<%= book.author %>">
+                                    <input type="hidden" name="coverImage" value="<%= book.coverImage %>">
+                                  <input type="hidden" name="publishDate" value="<%= book.publishDate %>">
+                                   <input type="hidden" name="description" value="<%= book.description %>">
+                                   <input type="hidden" name="pdfLink" value="<%= book.pdfLink %>">
+
+                                    
+                                   <button class="add-book-btn"><a>Add Book</a></button>
+                                </form>
+                            <% } else { %>
+                                <!-- If user is not logged in, show Login button -->
+                                <div class="text-center my-4">
+                                    <a href="/signin">
+                                        <button class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-blue-700 hover:shadow-lg active:bg-blue-800 transition-all duration-300">
+                                            Login to Add Book
+                                        </button>
+                                    </a>
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <p class="no-books">Try searching for a specific title!</p>
+        <% } %>
+    </section>
+
+    <!-- Additional Books Section -->
+    <section class="additional-books">
+        <h2>More Books You Might Like</h2>
+        <div class="book-list">
+            <% if (randomBooks && randomBooks.length > 0) { %>
+                <% randomBooks.forEach((book) => { %>
+                    <div class="suggestion-card">
+                        <div class="book-cover-container">
+                            <img src="<%= book.coverImage %>" alt="Cover of <%= book.title %>" class="book-cover">
+                        </div>
+                        <div class="book-description">
+                            <h3><%= book.title %></h3>
+                            <p><strong>Author:</strong> <%= book.author %></p>
+                            <p><%= book.description %></p>
+                            <ul class="positive-points">
+                                <li><a href="<%= book.pdfLink || '#' %>" target="_blank">
+                                    <%= book.pdfLink ? 'Open PDF' : 'No PDF available' %>
+                                </a></li>
+                            </ul>
+                            <!-- Login prompt for additional books -->
+                            <div class="buttons">
+                                <% if (user) { %>
+                                    <form action="/readingList" method="POST" class="add-to-list-form">
+                                        <input type="hidden" name="bookId" value="<%= book.bookId %>">
+                                        <input type="hidden" name="title" value="<%= book.title %>">
+                                        <input type="hidden" name="author" value="<%= book.author %>">
+                                        <input type="hidden" name="coverImage" value="<%= book.coverImage %>">
+                                        <input type="hidden" name="publishDate" value="<%= book.publishDate %>">
+                                        <input type="hidden" name="description" value="<%= book.description %>">
+                                        <input type="hidden" name="pdfLink" value="<%= book.pdfLink %>">
+                                        <button class="add-book-btn"><a>Add Book</a></button>
+                                    </form>
+                                <% } else { %>
+                                    <!-- If user is not logged in, show Login button -->
+                                    <div class="text-center my-4">
+                                        <a href="/signin">
+                                            <button class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-blue-700 hover:shadow-lg active:bg-blue-800 transition-all duration-300">
+                                                Login to Add Book
+                                            </button>
+                                        </a>
+                                    </div>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <p>No additional books available at the moment.</p>
+            <% } %>
+        </div>
+    </section>
+</div>
+
+<%- include('footer') %>

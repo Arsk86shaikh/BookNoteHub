@@ -1,0 +1,148 @@
+{
+  "welcomeCards": [
+    {
+      "image": "https://i0.wp.com/www.roomsneedlove.com/wp-content/uploads/2023/10/how-to-keep-track-of-your-reading-life-pin.png?resize=768%2C1152&ssl=1",
+      "title": "Track Your Reads",
+      "link":"http://localhost:3000/readingList"
+    },
+    {
+      "image": "https://www.notebooksapp.com/wp-content/uploads/2022/08/PDF-iPad.png",
+      "title": "Manage Your Notes",
+      "link":"https://openlibrary.org/"
+    },
+    {
+      "image": "https://pagesunbound.wordpress.com/wp-content/uploads/2022/02/how-i-discover-new-books-1.png",
+      "title": "Discover New Books",
+      "link":"http://localhost:3000/books"
+    },
+    {
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSkaUXeluaA0qmv4yW7rBND7Y2JqhFqqyAvQ&sg",
+      "title": "Connect with Readers",
+      "link":"http://localhost:3000/readingList"
+    },
+    {
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6R1k0DvhwNTQXmA62kbrKURUEAzOX_21NbQ&s",
+      "title": "Join Our Community",
+      "link":"http://localhost:3000/signin"
+    }
+  ],
+  "offerCards": [
+    {
+      "image": "https://images-platform.99static.com//yuSx_KKiMQ21rsbTzDXYa8CH12s=/421x201:1442x1222/fit-in/500x500/99designs-contests-attachments/137/137626/attachment_137626031",
+      "title": "Exclusive Deal for Existing Users",
+      "description": "To not be Exit ",
+      "viewLink": "http://localhost:3000/books?title=seeing+what+invisible"
+    },
+    {
+      "image": "https://png.pngtree.com/png-clipart/20220404/original/pngtree-cover-design-for-business-brochure-png-image_7509348.png",
+      "title": "Welcome Offer for New Users",
+      "description": "Sign up today and get enjoy a Ne books !",
+      "viewLink": "http://localhost:3000/books?title=corporate+design"
+     
+    },
+    {
+      "image": "https://designerpeople.com//wp-content/uploads/2020/02/negative-space-book-cover-design-ideas-2.jpg",
+      "title": "Popular Reads at Special site",
+      "description": "Enjoy discounts on our top-rated books.",
+      "viewLink": "http://localhost:3000/books?title=the+man+in+the+woods"
+    }
+  ],
+  "suggestions": [
+    {
+      "image": "https://images-na.ssl-images-amazon.com/images/I/51-uspgqWIL._SX328_BO1,204,203,200_.jpg",
+      "title": "Atomic Habits",
+      "description": "Atomic Habits by James Clear offers a proven framework for improving every day. No matter what your goals are, this book gives you the strategies to develop better habits, break bad ones, and master the tiny behaviors that lead to remarkable results.",
+      "positivePoints": [
+        { "text": "Powerful insights on habit formation", "link": "https://jamesclear.com/atomic-habits-summary" },
+        { "text": "Practical strategies for personal growth", "link": "https://www.goodreads.com/book/show/40121378-atomic-habits" },
+        { "text": "Actionable steps for positive change", "link": "https://blog.hubspot.com/marketing/atomic-habits-review" }
+      ],
+      "exploreLink": "https://www.google.co.in/books/edition/Atomic_Habits/fFCjDQAAQBAJ?hl=en&gbpv=1&pg=PT12&printsec=frontcover"
+    },
+    {
+      "image": "https://books.google.co.in/books/publisher/content?id=8VmuEAAAQBAJ&pg=PP1&img=1&zoom=3&hl=en&bul=1&sig=ACfU3U0aQcaSC4IpSy2TQXgGBoFvBib9MA&w=1280",
+      "title": "Don't Worry, Be Happy",
+      "description": "This uplifting book by John Doe teaches readers how to live worry-free by embracing positivity, mindfulness, and joy. Through inspiring stories and practical advice, it guides readers toward a happier, more peaceful life.",
+      "positivePoints": [
+        { "text": "Mindfulness practices for daily life", "link": "https://www.mindful.org/5-ways-to-be-happier/" },
+        { "text": "Positive thinking techniques", "link": "https://positivepsychology.com/positive-thinking-books/" },
+        { "text": "Uplifting stories", "link": "https://www.psychologytoday.com/us/blog/the-moment-youth/201811/dont-worry-be-happy" }
+      ],
+      "exploreLink": "https://www.google.co.in/books/edition/Don_t_Worry_Be_Happy/8VmuEAAAQBAJ?hl=en&gbpv=1&pg=PP1&printsec=frontcover"
+    },
+    {
+      "image": "https://m.media-amazon.com/images/I/81kNIZUR+jL._AC_UF1000,1000_QL80_.jpg",
+      "title": "The Way Of Peace",
+      "description": "The Way of Peace by James Allen reflects the New Thought Movement, referencing Buddhism, Hinduism, and Christianity. It explores meditation as a pathway to divinity, emphasizing purity of thought for personal transformation and inner peace.",
+      "positivePoints": [
+        { "text": "Engaging storytelling", "link": "https://www.feedtheminds.org/wp-content/uploads/2014/09/STORYTELLING-English.pdf" },
+        { "text": "Practical self-improvement tips", "link": "https://www.johnshalom.com/wp-content/uploads/2023/09/2.-Your-Self-Improvement-Guide_FREE.pdf" },
+        { "text": "Life lessons", "link": "https://www.richardcollison.net/lessons-peaceful-warrior/" }
+      ],
+      "exploreLink": "https://www.brainybetty.com/2007Motivation/James%20Allen%20-%20The%20Way%20of%20Peace.pdf"
+    }
+  ],
+  
+   "featuredBooks": [
+      {
+        "id": 1,
+        "title": "The Pragmatic Programmer",
+        "description": "Your journey to mastering software craftsmanship and problem-solving skills.",
+        "image": "https://images-na.ssl-images-amazon.com/images/I/41as+WafrFL._SX376_BO1,204,203,200_.jpg",
+        "link": "http://localhost:3000/books?title=The+Pragmatic+Programmer"
+      },
+      {
+        "id": 2,
+        "title": "Clean Code",
+        "description": "A handbook of agile software craftsmanship to write better code.",
+        "image": "https://images-na.ssl-images-amazon.com/images/I/51b7XbfMIIL._SX374_BO1,204,203,200_.jpg",
+        "link": "http://localhost:3000/books?title=clean+code"
+      },
+      {
+        "id": 3,
+        "title": "JavaScript: The Definitive Guide",
+        "description": "Master the language of the web with this comprehensive JavaScript guide.",
+        "image": "https://m.media-amazon.com/images/I/91hUer84PpL._SL1500_.jpg",
+        "link": "http://localhost:3000/books?title=javascript+%3A+The+definite+guide"
+      },
+      {
+        "id": 4,
+        "title": "Eloquent JavaScript",
+        "description": "A modern introduction to programming with an emphasis on JavaScript.",
+        "image": "https://eloquentjavascript.net/img/cover.jpg",
+        "link": "http://localhost:3000/books?title=eloquent+javascript"
+      },
+      {
+        "id": 5,
+        "title": "Effective TypeScript",
+        "description": "Learn TypeScript's advanced techniques and improve your JavaScript projects.",
+        "image": "https://m.media-amazon.com/images/I/81sJB+PbfEL._SL1500_.jpg",
+        "link": "http://localhost:3000/books?title=typeScript"
+      },
+      {
+        "id": 6,
+        "title": "Deep Learning with Python",
+        "description": "Dive into deep learning and build powerful AI models with Python.",
+        "image": "https://images.manning.com/360/480/resize/book/7/65fca1c-6826-472d-bbea-c1d4a7b3c570/Chollet-DLP-HI.png",
+        "link": "http://localhost:3000/books?title=Deep+Learning"
+      },
+      {
+        "id": 7,
+        "title": "Refactoring",
+        "description": "Enhance your code's structure and readability through effective refactoring techniques.",
+        "image": "https://martinfowler.com/books/refact2.jpg",
+        "link": "http://localhost:3000/books?title=Refactoring"
+      },
+      {
+        "id": 8,
+        "title": "The Art of Computer Programming",
+        "description": "Dive deep into algorithms and computational theory.",
+        "image": "https://m.media-amazon.com/images/I/61ndJx-40NL._SY466_.jpg",
+        "link": "http://localhost:3000/books?title=The+Art+of+the+computer+programming"
+      }
+    ]
+  
+  
+  }
+  
+

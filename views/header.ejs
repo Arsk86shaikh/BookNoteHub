@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css"> <!-- Link to your CSS file -->
+    <title><%= title %></title> <!-- Dynamic title -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome for icons -->
+</head>
+
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/books">Books</a></li>
+                <li><a href="/readingList">My Reading List</a></li>
+                <li><a href="/publish">Publish New Book</a></li>
+                <li><a href="/storebook">Store Book</a></li> <!-- Added Store Book link -->
+
+                <!-- Search Form -->
+                <li>
+                    <form id="searchForm" action="/books" method="GET" class="search-form">
+                        <div class="search-container">
+                            <input name="title" type="text" id="searchInput" placeholder="Search books..." aria-label="Search books" required>
+                            <button type="submit" id="searchButton" aria-label="Search">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </li>
+
+                <!-- Conditional Links based on User Authentication -->
+                <% if (user) { %>
+                    <li><a href="/logout">Logout</a></li> <!-- Logout link for authenticated user -->
+                    <li class="user-greeting">
+                        <!-- User Avatar and Username with Name-based Customization -->
+                        <div class="user-avatar">
+                            <% 
+                                const firstLetter = user.username.charAt(0).toLowerCase();
+                                let avatarSrc = ''; 
+                        
+                                if (firstLetter >= 'a' && firstLetter <= 'g') { 
+                                    avatarSrc = 'https://cdn-icons-png.flaticon.com/512/2921/2921826.png'; // Avatar for A-G
+                                } else if (firstLetter >= 'h' && firstLetter <= 'm') { 
+                                    avatarSrc = 'https://cdn-icons-png.flaticon.com/512/2921/2921837.png'; // Avatar for H-M
+                                } else if (firstLetter >= 'n' && firstLetter <= 't') { 
+                                    avatarSrc = 'https://cdn-icons-png.flaticon.com/512/2921/2921828.png'; // Avatar for N-T
+                                } else { 
+                                    avatarSrc = 'https://cdn-icons-png.flaticon.com/512/2921/2921840.png'; // Avatar for other letters
+                                }
+                            %>
+                            <img src="<%= avatarSrc %>" alt="User Avatar" class="avatar-img">
+                        </div>
+                        
+                        <span>Welcome, <%= user.username %>!</span>
+                    </li> <!-- Greeting the logged-in user -->
+                <% } else { %>
+                    <li><a href="/signup">Sign Up</a></li> <!-- Sign Up link -->
+                    <li><a href="/signin">Sign In</a></li> <!-- Sign In link -->
+                <% } %>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <% if (title === '/') { %> <!-- Only show dashboard content if on the dashboard page -->
+            <div class="dashboard-container">
+                <h1>Welcome to Your Dashboard</h1>
+                <% if (user) { %>
+                    <div class="user-info">
+                        <h2>Hello, <%= user.username %>!</h2>
+                        <p>Manage your books, view your reading list, and more.</p>
+                    </div>
+                <% } else { %>
+                    <p>Please <a href="/signin">sign in</a> to access your dashboard.</p>
+                <% } %>
+            </div>
+        <% } %>
+    </main>
+
+    <script>
+        // Search button functionality
+        document.getElementById('searchForm').addEventListener('submit', function (event) {
+            const searchTerm = document.getElementById('searchInput').value.trim();
+            if (searchTerm === "") {
+                event.preventDefault(); // Prevent form submission if search term is empty
+                alert("Please enter a search term.");
+            }
+        });
+    </script>
+</body>
+
+</html>

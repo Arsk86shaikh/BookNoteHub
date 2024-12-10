@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publish a New Book</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: #f4f4f9;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        div {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        label {
+            font-weight: bold;
+            color: #34495e;
+        }
+
+        input, textarea, button {
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input:focus, textarea:focus, button:focus {
+            outline: none;
+            border-color: #2980b9;
+            box-shadow: 0 0 5px rgba(41, 128, 185, 0.5);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        button {
+            background: #2980b9;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #1f6392;
+        }
+
+        .message, .success {
+            font-size: 1rem;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .message {
+            background: #e74c3c;
+            color: #fff;
+        }
+
+        .success {
+            background: #27ae60;
+            color: #fff;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            input, textarea, button {
+                font-size: 0.9rem;
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Include header -->
+    <%- include('header', { title: 'Publish New Book', user: user }) %>
+
+    <div class="container">
+        <h1>Publish a New Book</h1>
+
+        <!-- Display any message passed from the server -->
+        <% if (message) { %>
+            <p class="message"><%= message %></p>
+        <% } %>
+
+        <!-- Display success message if book is published -->
+        <% if (success) { %>
+            <p class="success">Book published successfully!</p>
+        <% } %>
+
+        <!-- Book publishing form -->
+        <form action="/publish" method="POST" enctype="multipart/form-data">
+            <div>
+                <label for="title">Book Title:</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+            <div>
+                <label for="author">Author:</label>
+                <input type="text" id="author" name="author" required>
+            </div>
+            <div>
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" required></textarea>
+            </div>
+            <div>
+                <label for="coverImage">Cover Image:</label>
+                <input type="file" id="coverImage" name="coverImage" accept="image/*" required>
+            </div>
+            <div>
+                <label for="publicationDate">Publication Date and Time:</label>
+                <input type="datetime-local" id="publicationDate" name="publicationDate" required>
+            </div>
+            <div>
+                <label for="pdfFile">Upload PDF:</label>
+                <input type="file" id="pdfFile" name="pdfFile" accept="application/pdf" required>
+            </div>
+            <button type="submit">Publish Book</button>
+        </form>
+    </div>
+
+    <!-- Include footer -->
+    <%- include('footer') %>
+</body>
+</html>

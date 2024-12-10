@@ -1,0 +1,1082 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+
+/* Base Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+/* Welcome Section Styles */
+.welcome-section {
+    text-align: center;
+    padding: 40px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+}
+
+/* Heading Styles */
+.welcome-section h1 ,h2{
+    color: #4a90e2;
+    font-size: 2.5em; /* Increased size for better visibility */
+    transition: color 0.3s ease; /* Smooth color transition */
+}
+
+/* Paragraph Styles */
+.welcome-section p {
+    color: #333;
+    font-size: 1.2em;
+    margin-bottom: 20px;
+}
+
+/* Image Gallery Styles */
+.image-gallery {
+    display: flex;
+    overflow-x: auto; /* Horizontal scrollbar */
+    padding: 10px;
+    gap: 50px; /* Set gap between cards */
+}
+
+/* Card Styles */
+.card {
+    gap:50px;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px; /* More rounded corners */
+    padding: 10px;
+    min-width: 200px; /* Minimum width for cards */
+    max-width: 200px; /* Maximum width for cards */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effect */
+}
+
+/* Image Styles */
+.card img {
+    width: 100%;
+    height: auto; /* Maintain aspect ratio */
+    object-fit: cover; /* Crop and fill the image */
+    border-radius: 8px; /* Rounded corners for images */
+    transition: transform 0.3s ease; /* Smooth transition for image scale */
+}
+
+/* Card Title Styles */
+.card h3 {
+    margin: 10px 0 0;
+    color: #4a90e2; /* Title color */
+    font-weight: bold; /* Bold text for better visibility */
+}
+
+/* Hover Effects for Cards */
+.card:hover {
+    transform: translateY(-5px); /* Slightly lift the card */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Increase shadow on hover */
+}
+
+/* Hover Effect for Images */
+.card:hover img {
+    transform: scale(1.1); /* Scale up the image on hover */
+}
+
+/* Welcome Section Hover Effect */
+.welcome-section:hover h1 {
+    color: #007BFF; /* Change color on hover */
+}
+
+/* Add styles for mobile responsiveness */
+@media (max-width: 768px) {
+    .image-gallery {
+        flex-direction: column; /* Stack cards vertically on smaller screens */
+        align-items: center; /* Center align cards */
+    }
+
+    .card {
+        margin: 10px ; /* Margin adjustments for stacked cards */
+        width: 100%; /* Full width for cards */
+        max-width: auto; /* Max width for larger cards */
+    }
+}
+
+
+
+/* Sticky Navbar */
+header {
+    background: linear-gradient(90deg, #4a90e2, #9013fe);
+    color: #fff;
+    padding: 10px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* Wrap items on smaller screens */
+    padding: 10px 20px;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap; /* Allows wrapping for smaller screens */
+}
+
+nav ul li {
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+
+
+/* Styling the anchor tag inside each card */
+.card a {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    padding: 15px;
+}
+nav ul li a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #0c0c0c;
+}
+
+/* Search Form Styles */
+#searchForm {
+    display: flex;
+    align-items: center;
+}
+
+#searchInput {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 200px;
+    transition: width 0.3s;
+}
+
+#searchInput:focus {
+    width: 250px;
+}
+
+#searchButton {
+    padding: 8px 12px;
+    background: #333;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+
+
+/* Container for input and button */
+.search-container {
+    position: relative;
+    display: inline-block;
+}
+
+/* Style the input field */
+#searchInput {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 200px;
+    transition: width 0.3s;
+}
+
+/* Style the search button */
+#searchButton {
+    padding: 8px;
+    background: transparent;  /* Remove background color */
+    color: #333;  /* Change icon color */
+    border: none;  /* Remove border */
+    border-radius: 5px;
+    cursor: pointer;
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Style the icon inside the button */
+#searchButton i {
+    font-size: 1em;
+}
+
+/* Input focus effect */
+#searchInput:focus {
+    width: 250px;
+}
+
+/* Prevent button from breaking layout */
+#searchForm {
+    margin: 0;
+    padding: 0;
+}
+
+.avatar-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Dashboard styling */
+.dashboard-container {
+    margin: 30px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-container h1 {
+    font-size: 2rem;
+    color: #333;
+    text-align: center;
+}
+
+.user-info {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.user-info h2 {
+    font-size: 1.5rem;
+    color: #555;
+}
+
+.user-info p {
+    font-size: 1rem;
+    color: #777;
+}
+
+
+/* Responsive styles */
+@media screen and (max-width: 768px) {
+    header nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .user-greeting {
+        text-align: center;
+    }
+}
+/* Responsive Design */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column; /* Stack items vertically on smaller screens */
+        padding: 15px;
+    }
+    nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+    nav ul li {
+        margin: 10px 0;
+    }
+    #searchForm {
+        margin-top: 10px;
+        width: 100%;
+        text-align: center;
+    }
+    #searchInput {
+        width: 100%;
+        max-width: 250px;
+    }
+}
+
+@media (max-width: 480px) {
+    nav ul li a {
+        padding: 8px 10px;
+    }
+    #searchInput {
+        width: 100%;
+        max-width: 200px;
+    }
+}
+
+
+
+/* Main Styles */
+main {
+    padding: 20px;
+}
+
+.offers, .suggestions {
+    margin: 20px 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.offers > h2, .suggestions > h2 {
+    width: 100%;
+}
+
+/* Form Styles */
+form {
+    max-width: 400px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+input, textarea {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc; /* Border for input fields */
+    border-radius: 4px; /* Rounded corners for input fields */
+}
+
+button {
+    padding: 10px;
+    background: #333;
+    color: white;
+    border: none;
+    border-radius: 5px; /* Rounded corners for button */
+    cursor: pointer; /* Pointer cursor on hover */
+}
+
+button:hover {
+    background: #444; /* Darker background on hover */
+}
+
+/* Footer styling */
+footer {
+    background-color: #3A3D40; /* Dark background for a cozy, library-themed feel */
+    color: #DADADA; /* Light text color for contrast */
+    padding: 20px;
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+}
+
+.footer-content {
+    max-width: 1000px;
+    margin: auto;
+}
+
+.footer-content p {
+    font-size: 14px;
+    margin-bottom: 10px;
+    color: #A8A8A8;
+}
+
+/* Styling for social links */
+.social-links {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.social-links li {
+    display: inline-block;
+}
+
+.social-links a {
+    text-decoration: none;
+    color: #DADADA;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: color 0.3s ease;
+}
+
+/* Icons color and hover effect */
+.social-links a:hover {
+    color: #FFD700; /* Gold color on hover */
+}
+
+.social-links i {
+    font-size: 18px;
+    color: #FFD700; /* Matching icon color */
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .social-links {
+        flex-direction: column;
+    }
+    .social-links li {
+        margin-bottom: 10px;
+    }
+}
+
+/* Offers Section */
+.offers {
+    text-align: center;
+    padding: 40px;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+}
+
+.offers h2 {
+    color: #2a75b3;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+/* Offers Gallery */
+.offers-gallery {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding: 10px;
+    justify-content: center;
+}
+
+/* Offer Card */
+.offer-card {
+    background: #ffffff;
+    border: none;
+    border-radius: 12px;
+    padding: 0;
+    min-width: 250px;
+    max-width: 250px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
+    border-left: 5px solid #4a90e2; /* Default border color */
+}
+
+.offer-card img.book-cover {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.offer-card .offer-content {
+    padding: 15px;
+    text-align: center;
+}
+
+.offer-card h3 {
+    color: #4a90e2;
+    font-size: 1.5em;
+    margin: 10px 0;
+}
+
+.offer-card p {
+    color: #555;
+    font-size: 1em;
+    margin-bottom: 15px;
+}
+
+/* Buttons */
+
+.offer-btn {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.offer-btn:hover {
+    background-color: #007bff;
+    transform: scale(1.05);
+}
+
+/* Claim Button */
+.claim-btn {
+    background-color: #28a745;
+}
+
+.claim-btn:hover {
+    background-color: #218838;
+}
+
+/* Hover Effects for Offer Cards */
+.offer-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+    border-left: 5px solid #ff9800; /* Change border color on hover */
+}
+
+.offer-card:hover img.book-cover {
+    transform: scale(1.1);
+}
+
+/* Colored Borders Based on User Type */
+.existing-user {
+    border-left: 5px solid #4a90e2;
+}
+
+.new-user {
+    border-left: 5px solid #28a745;
+}
+
+.popular-deal {
+    border-left: 5px solid #ff9800;
+}
+
+/* Card Side Gradient Animation */
+.offer-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 5px;
+    background: linear-gradient(180deg, #4a90e2, #ff9800, #28a745);
+    animation: border-color-animation 3s infinite;
+}
+
+@keyframes border-color-animation {
+    0% { background: linear-gradient(180deg, #4a90e2, #ff9800, #28a745); }
+    50% { background: linear-gradient(180deg, #28a745, #4a90e2, #ff9800); }
+    100% { background: linear-gradient(180deg, #ff9800, #28a745, #4a90e2); }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .offers-gallery {
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
+    }
+
+    .offer-card {
+        width: 100%;
+        max-width: 100%;
+    }
+}
+/* General Styling */
+body {
+    font-family: 'Roboto', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f7f9fc;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Page Title */
+h1 {
+    text-align: center;
+    color: #333;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+/* Search Form */
+.search-form {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+    gap: 10px;
+    flex-wrap: wrap; /* Ensures wrapping on smaller screens */
+}
+
+.search-input {
+    padding: 10px;
+    font-size: 1rem;
+    width: 60%;
+    border: 2px solid #007bff;
+    border-radius: 20px 0 0 20px;
+    outline: none;
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.search-input:focus {
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+.search-button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 0 20px 20px 0;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.search-button:hover {
+    background-color: #0056b3;
+}
+
+.search-button:active {
+    transform: scale(0.95);
+}
+
+.carousel-section {
+    padding: 2rem;
+    text-align: center;
+    background-color: #f9f9f9;
+  }
+  
+  .carousel-container {
+    position: relative;
+    overflow: hidden;
+    width: 90%;
+    margin: auto;
+  }
+  
+  .carousel {
+    display: flex;
+    transition: transform 0.3s ease-in-out;
+    gap: 1rem;
+  }
+  
+  .carousel-card {
+    flex: 0 0 300px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #fff;
+    padding: 1rem;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+  }
+  
+  .carousel-card:hover {
+    transform: scale(1.05);
+  }
+  
+  .carousel-card img {
+    width: 100%;
+    border-radius: 8px;
+  }
+  
+  .carousel-card h3 {
+    margin: 1rem 0 0.5rem;
+    font-size: 1.2rem;
+  }
+  
+  .carousel-card p {
+    font-size: 0.9rem;
+    color: #555;
+  }
+  
+  .carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #fff;
+    border: none;
+    border-radius: 50%;
+    padding: 0.5rem;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  }
+  
+  .carousel-btn i {
+    font-size: 1.2rem;
+    color: #333;
+  }
+  
+  .carousel-btn.prev {
+    left: 10px;
+  }
+  
+  .carousel-btn.next {
+    right: 10px;
+  }
+  
+  .carousel-btn:hover {
+    background-color: #f0f0f0;
+  }
+  
+  @media (max-width: 768px) {
+    .carousel-card {
+      flex: 0 0 80%;
+    }
+  }
+  
+
+
+
+
+/* Book Cards Layout */
+.book-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.book-card {
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.book-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Card Sections */
+.card-header h2 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.card-header .book-author {
+    color: #777;
+    font-style: italic;
+}
+
+.card-body {
+    margin: 15px 0;
+}
+
+.card-body p {
+    color: #555;
+    margin: 5px 0;
+}
+
+/* Card Footer */
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.add-to-list-button {
+    padding: 10px 15px;
+    border: none;
+    background: linear-gradient(45deg, #28a745, #1e7e34);
+    color: #fff;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.add-to-list-button:hover {
+    background: linear-gradient(45deg, #1e7e34, #145a24);
+    box-shadow: 0 6px 12px rgba(40, 167, 69, 0.6);
+    transform: translateY(-2px);
+}
+
+.add-to-list-button:active {
+    transform: scale(0.95);
+}
+.book-cover {
+    width: 150px;
+    height: 200px;
+    object-fit: cover;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+
+/* No Books Found */
+.no-books {
+    text-align: center;
+    color: #555;
+    font-size: 1.2rem;
+    margin-top: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .search-input {
+        width: 100%;
+        border-radius: 20px;
+        margin-bottom: 10px;
+    }
+
+    .search-button {
+        width: 100%;
+        border-radius: 20px;
+    }
+
+    .add-to-list-button {
+        width: 100%;
+    }
+}
+
+.pdf-link {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.pdf-link:hover {
+    text-decoration: underline;
+}
+
+/* Global font family applied to all elements */
+body {
+    font-family: 'Roboto', Arial, sans-serif; /* Example font-family */
+    margin: 0;
+    padding: 0;
+}
+
+.suggestions {
+    height: auto;
+    width: 90%; 
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+}
+
+.suggestion-card {
+    width: 90%;
+    display: flex;
+    align-items: center;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Left side: Rotating Book Cover */
+.book-cover-container {
+    flex: 1;
+    max-width: 200px;
+    margin-right: 30px;
+    perspective: 1000px;
+}
+
+.book-cover {
+    width: 100%;
+    border-radius: 5px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    transition: transform 0.8s;
+}
+
+.book-cover-container:hover .book-cover {
+    transform: rotateY(360deg);
+}
+
+button a {
+    text-decoration: none;
+    color: inherit;
+    font-weight: 600;
+}
+/* Right side: Book Description */
+.book-description {
+    flex: 2;
+    text-align: left;
+    padding: 10px 20px;
+}
+
+.book-description h3 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.book-description p {
+    color: #555;
+    margin-bottom: 10px;
+}
+
+/* Style the positive points container */
+.positive-points {
+    list-style-type: none; /* Removes the default list style */
+    padding: 0;
+    margin: 20px 0;
+    display: flex; /* Displays the list items in a row */
+    flex-direction: column; /* Stacks the items vertically */
+    gap: 15px; /* Adds space between each item */
+    font-family: 'Arial', sans-serif; /* Sets the font */
+}
+
+.positive-points li {
+    font-size: 1.2em; /* Adjust the font size */
+    color: #333; /* Default text color */
+    position: relative; /* Used for positioning the icon */
+    transition: transform 0.3s ease; /* Smooth transform transition */
+}
+
+/* Style for links inside list items */
+.positive-points a {
+    text-decoration: none; /* Removes underline from links */
+    color: #4CAF50; /* Link color */
+    transition: color 0.3s ease, padding-left 0.3s ease; /* Transition effect */
+    display: inline-block; /* Makes the link behave like an inline block */
+}
+
+/* Hover effect for list items */
+.positive-points li:hover {
+    transform: translateX(5px); /* Moves the item slightly to the right on hover */
+}
+
+/* Hover effect for links */
+.positive-points a:hover {
+    color: #45a049; /* Darker green on hover */
+    padding-left: 10px; /* Adds padding when hovered */
+}
+
+/* Add a little icon before each list item */
+.positive-points li::before {
+    content: "✔"; /* Adds a checkmark icon */
+    position: absolute;
+    left: -25px; /* Positions the icon to the left of the text */
+    font-size: 1.5em; /* Size of the icon */
+    color: #4CAF50; /* Icon color */
+    transition: transform 0.3s ease; /* Smooth transition for the icon */
+}
+
+/* Hover effect on the icon */
+.positive-points li:hover::before {
+    transform: scale(1.2); /* Makes the icon grow slightly when hovering */
+}
+
+.login-button-container {
+    text-align: center; /* Center align the button */
+    margin-top: 20px; /* Add spacing above */
+  }
+  
+  .custom-login-btn {
+    display: inline-block;
+    padding: 12px 24px; /* Adjust button size */
+    color: #fff; /* White text */
+    background: linear-gradient(90deg, #ff7e5f, #feb47b); /* Gradient background */
+    font-size: 16px; /* Font size */
+    font-weight: bold; /* Make the text bold */
+    text-transform: uppercase; /* Uppercase text for emphasis */
+    text-decoration: none; /* Remove underline */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effects */
+  }
+  
+  .custom-login-btn:hover {
+    transform: translateY(-3px); /* Slight lift on hover */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+    background: linear-gradient(90deg, #feb47b, #ff7e5f); /* Reverse gradient for hover effect */
+  }
+  
+  .custom-login-btn:active {
+    transform: translateY(2px); /* Pressed-down effect */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Reduced shadow when clicked */
+  }
+  
+.explore-more-container {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .explore-more-btn {
+    display: inline-block;
+    background-color: #007bff; /* Blue color */
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .explore-more-btn a {
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* Space between icon, text, and arrow */
+  }
+  
+  .explore-more-btn i {
+    font-size: 18px;
+  }
+  
+  .explore-more-btn .arrow {
+    font-size: 18px;
+    font-weight: bold;
+    margin-left: 5px;
+    transition: margin-left 0.3s ease;
+  }
+  
+  .explore-more-btn:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
+  
+  .explore-more-btn:hover .arrow {
+    margin-left: 10px; /* Animates the arrow to slide forward */
+  }
+  
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .suggestion-card {
+        flex-direction: column;
+        width: 95%;
+        text-align: center;
+    }
+    
+    .book-cover-container {
+        margin: 0 auto 20px auto;
+    }
+    
+    .book-description {
+        text-align: center;
+    }
+}
+
+
+
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    nav ul li {
+        display: block; /* Stack navbar items on smaller screens */
+        margin: 10px 0;
+    }
+
+    .offers, .suggestions {
+        flex-direction: column; /* Stack offers and suggestions */
+    }
+
+    form {
+        width: 100%; /* Full width for forms on small screens */
+    }
+
+    #searchInput {
+        width: 100%; /* Full width for input on small screens */
+    }
+}
+
+

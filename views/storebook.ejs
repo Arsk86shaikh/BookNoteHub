@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Store</title>
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        /* Special styling for the message */
+        p.message {
+            font-weight: bold;
+            font-size: 18px;
+            color: #007bff;
+            text-align: center;
+            background-color: #f8f9fa;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        /* Styling for the total-books paragraph */
+        p.total-books {
+            font-weight: 600;
+            color: #28a745;
+            text-align: center;
+        }
+
+        /* Styling for no PDF availability */
+        p.no-pdf {
+            font-style: italic;
+            color: #dc3545;
+        }
+
+        .book-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .book-card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            width: 300px;
+            background: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .book-cover {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+
+        .action-buttons {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 10px 15px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .btn-download {
+            background-color: #007bff;
+        }
+
+        .btn-download:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-remove {
+            background-color: #dc3545;
+        }
+
+        .btn-remove:hover {
+            background-color: #a71d2a;
+        }
+
+        .remove-book-form {
+            display: inline;
+        }
+    </style>
+</head>
+<body>
+    <%- include('header', { title: 'Book Store' }) %>
+
+    <div class="container">
+        <!-- Display message based on user and books -->
+        <% if (books && books.length > 0) { %>
+            <p class="message">Here are your published books:</p>
+        <% } else { %>
+            <p class="message">You don't have any books in the store yet. Consider adding your first book!</p>
+        <% } %>
+
+        <!-- Display total books -->
+        <% if (totalBooks > 0) { %>
+            <p class="total-books">Total Books Available: <strong><%= totalBooks %></strong></p>
+        <% } %>
+
+        <!-- Check if books are available -->
+        <% if (books && books.length > 0) { %>
+            <div class="book-list">
+                <% books.forEach(book => { %>
+                    <div class="suggestion-card">
+                        <div class="book-cover-container">
+                            <img src="<%= book.coverImage %>" alt="Cover of <%= book.title %>" class="book-cover">
+                        </div>
+                        <div class="book-description">
+                            <h3><%= book.title %></h3>
+                            <p><strong>Author:</strong> <%= book.author %></p>
+                            <p><strong>Description:</strong> <%= book.description || 'No description available.' %></p>
+
+                            <p><strong>Publish Date:</strong> <%= book.publicationDate ? new Date(book.publicationDate).toLocaleDateString() : 'Unknown' %></p>
+
+                            <div class="action-buttons">
+                                <% if (book.pdfLink) { %>
+                                    <a href="<%= book.pdfLink %>" download class="btn btn-download">Download PDF</a>
+                                <% } else { %>
+                                    <p class="no-pdf">PDF not available</p>
+                                <% } %>
+                
+                        <!-- Remove Book Button -->
+                        <form action="/storebook/remove" method="POST" class="remove-book-form">
+                            <input type="hidden" name="title" value="<%= book.title %>">
+                            <button type="submit" class="remove-book-btn">Remove</button>
+                        </form>
+                    </div>
+                    </div>
+                    </div>
+                <% }) %>
+            </div>
+        <% } else { %>
+            <p>No books available in the store.</p>
+        <% } %>
+    </div>
+
+    <%- include('footer') %>
+</body>
+</html>
