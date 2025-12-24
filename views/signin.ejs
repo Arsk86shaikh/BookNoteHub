@@ -1,150 +1,189 @@
+<!-- signin.ejs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - BookNote Hub</title>
     <link rel="stylesheet" href="/css/styles.css">
-    <link href="/css/output.css" rel="stylesheet">
-
     <style>
-        /* Additional inline CSS for signup page */
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
-            background-color: #f5f5f5;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
         main {
             background: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-            max-width: 400px;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.3);
+            max-width: 450px;
             width: 100%;
         }
         h2 {
             text-align: center;
             color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        .error-message {
+            background-color: #fee;
+            color: #c33;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #c33;
+            font-size: 14px;
+        }
+        .success-message {
+            background-color: #efe;
+            color: #3c3;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #3c3;
+            font-size: 14px;
         }
         form {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 20px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
         label {
-            font-weight: bold;
+            font-weight: 600;
             color: #555;
+            font-size: 14px;
         }
         input[type="text"],
         input[type="password"] {
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #667eea;
         }
         .password-container {
             position: relative;
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
         }
         .toggle-password-btn {
-            align-self: flex-end;
-            background-color: #ddd;
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: transparent;
             border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
+            color: #667eea;
             font-size: 12px;
             cursor: pointer;
+            font-weight: 600;
         }
-        button[type="submit"]:hover,
         .toggle-password-btn:hover {
-            background-color: #357ae8;
+            color: #764ba2;
         }
-        .social-btns {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 15px;
-            flex-direction: column;
+        button[type="submit"] {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-        .social-btn {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 15px;
-            color: #fff;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 14px;
-            justify-content: center;
-            font-weight: bold;
-        }
-        .google-btn {
-            background-color: #4285F4;
-        }
-        .facebook-btn {
-            background-color: #3B5998;
+        button[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
         .signup-link {
             text-align: center;
-            margin-top: 15px;
+            margin-top: 20px;
+            color: #666;
+            font-size: 14px;
         }
         .signup-link a {
-            color: #357ae8;
+            color: #667eea;
             text-decoration: none;
-            font-weight: bold;
+            font-weight: 600;
         }
-        @media (max-width: 400px) {
+        .signup-link a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+        @media (max-width: 500px) {
             main {
-                padding: 15px;
+                padding: 30px 20px;
+                margin: 20px;
             }
             h2 {
-                font-size: 20px;
-            }
-            .social-btn {
-                font-size: 13px;
+                font-size: 24px;
             }
         }
     </style>
 </head>
 <body>
     <main>
-        <h2>Login</h2>
-        <form action="/signin" method="POST">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
+        <h2>Welcome Back</h2>
+        <p class="subtitle">Sign in to your account</p>
 
-            <label for="password">Password:</label>
-            <div class="password-container">
-                <input type="password" id="password" name="password" required>
-                <button type="button" class="toggle-password-btn" onclick="togglePassword('password')">Show</button>
+        <% if (message) { %>
+            <div class="error-message">
+                <%= message %>
+            </div>
+        <% } %>
+
+        <form action="/signin" method="POST">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" required>
             </div>
 
-            <button type="submit">Login</button>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="password-container">
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                    <button type="button" class="toggle-password-btn" onclick="togglePassword('password')">Show</button>
+                </div>
+            </div>
+
+            <button type="submit">Sign In</button>
         </form>
 
-        <!-- Sign Up Link -->
         <div class="signup-link">
-            <p>New to the site? <a href="/signup">Sign Up</a></p>
+            Don't have an account? <a href="/signup">Sign Up</a>
         </div>
     </main>
 
     <script>
-        // Function to toggle password visibility
-        function togglePassword() {
-            const passwordField = document.getElementById("password");
-            const toggleButton = document.querySelector(".toggle-password-btn");
-
-            if (passwordField.type === "password") {
-                passwordField.type = "text"; // Show password
-                toggleButton.textContent = "Hide"; // Change button text to "Hide"
+        function togglePassword(id) {
+            const passwordInput = document.getElementById(id);
+            const toggleButton = passwordInput.nextElementSibling;
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleButton.textContent = 'Hide';
             } else {
-                passwordField.type = "password"; // Hide password
-                toggleButton.textContent = "Show"; // Change button text to "Show"
+                passwordInput.type = 'password';
+                toggleButton.textContent = 'Show';
             }
         }
     </script>

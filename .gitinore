@@ -3,3 +3,5 @@ server.js,
 database.js,
 route,
 data.json
+.env
+uploads

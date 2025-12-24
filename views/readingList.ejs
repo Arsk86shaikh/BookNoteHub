@@ -5,34 +5,43 @@
 <div class="container">
     <h1>Your Reading List</h1>
 
-    <!-- Display Books in the Reading List -->
     <section class="suggestions">
         <% if (books && books.length > 0) { %>
             <% books.forEach(book => { %>
                 <div class="suggestion-card">
                     <div class="book-cover-container">
-                        <img src="<%= book.coverimage %>" alt="Cover of <%= book.title %>" class="book-cover">
+                        <img 
+                            src="<%= book.coverImage || '/default-cover.jpg' %>" 
+                            alt="Cover of <%= book.title %>" 
+                            class="book-cover"
+                            onerror="this.src='/default-cover.jpg'">
                     </div>
                     <div class="book-description">
                         <h3><%= book.title %></h3>
-                        <p><strong>Author:</strong> <%= book.author %></p>
-                        <p><%= book.description %></p>
-                        <ul class="positive-points">
-                            <li><a href="<%= book.pdflink || '#' %>" target="_blank">
-                                <%= book.pdflink ? 'Open PDF' : 'No PDF available' %>
-                            </a></li>
-                        </ul>
-                     
-                    <!-- Remove Book Button -->
-                    <form action="/removeFromReadingList" method="POST" class="remove-book-form">
-                        <input type="hidden" name="title" value="<%= book.title %>">
-                        <button type="submit" class="remove-book-btn">Remove</button>
-                    </form>
-                </div>
+                        <p><strong>Author:</strong> <%= book.author || 'Unknown' %></p>
+                        <p><%= book.description || 'No description available' %></p>
+                        
+                        <% if (book.pdfLink) { %>
+                            <div class="buttons">
+                                <a href="<%= book.pdfLink %>" target="_blank" class="explore-btn">
+                                    📄 Open PDF
+                                </a>
+                            </div>
+                        <% } %>
+                        
+                        <!-- Remove Book Button -->
+                        <form action="/removeFromReadingList" method="POST" class="remove-book-form">
+                            <input type="hidden" name="title" value="<%= book.title %>">
+                            <button type="submit" class="remove-book-btn">🗑️ Remove</button>
+                        </form>
+                    </div>
                 </div>
             <% }) %>
         <% } else { %>
-            <p>Your reading list is empty! Start adding books now.</p>
+            <div class="empty-state">
+                <p>📚 Your reading list is empty!</p>
+                <a href="/books" class="explore-btn">Start adding books</a>
+            </div>
         <% } %>
     </section>
 </div>
