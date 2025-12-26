@@ -1,96 +1,588 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/styles.css"> <!-- Link to your CSS file -->
-    <title><%= title %></title> <!-- Dynamic title -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome for icons -->
+    <title><%= title || 'BookNote Hub' %></title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+      /* Header Styles */
+        #header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        #header.scrolled {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Desktop Navigation */
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links li a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links li a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Auth Buttons */
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.6rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-signin {
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-signin:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-signup {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-signup:hover {
+            background: #4f46e5;
+        }
+
+        /* User Profile Dropdown */
+        .user-profile {
+            position: relative;
+        }
+
+        .profile-trigger {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+        }
+
+        .profile-trigger:hover {
+            background: #f8fafc;
+        }
+
+        .avatar-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .username {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .dropdown-arrow {
+            font-size: 0.8rem;
+            transition: transform 0.3s ease;
+        }
+
+        .profile-trigger.active .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 0.5rem);
+            right: 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            min-width: 220px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-menu.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            color: var(--text-dark);
+            text-decoration: none;
+            transition: background 0.3s ease;
+        }
+
+        .dropdown-item:first-child {
+            border-radius: 12px 12px 0 0;
+        }
+
+        .dropdown-item:last-child {
+            border-radius: 0 0 12px 12px;
+        }
+
+        .dropdown-item:hover {
+            background: #f8fafc;
+        }
+
+        .dropdown-item.logout {
+            color: #e53e3e;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .dropdown-item.logout:hover {
+            background: #fee;
+        }
+
+        /* Mobile Sidebar Styles */
+        body.sidebar-open {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+        }
+
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 1500;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-sidebar {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 320px;
+            max-width: 85vw;
+            height: 100vh;
+            background: white;
+            box-shadow: -5px 0 40px rgba(0, 0, 0, 0.3);
+            z-index: 1800;
+            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto;
+            padding: 2rem 1.5rem;
+        }
+
+        .mobile-sidebar.active {
+            right: 0;
+        }
+
+        .mobile-sidebar-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
+        .mobile-sidebar-header .avatar-img {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1rem;
+            display: block;
+            border: 3px solid var(--primary-color);
+            border-radius: 50%;
+        }
+
+        .mobile-sidebar-header h3 {
+            color: var(--text-dark);
+            font-size: 1.2rem;
+            margin: 0;
+            font-weight: 700;
+        }
+
+        .mobile-sidebar .nav-links {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .mobile-sidebar .nav-links li {
+            width: 100%;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .mobile-sidebar .nav-links li:last-child {
+            border-bottom: none;
+        }
+
+        .mobile-sidebar .nav-links li a {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.2rem 0.8rem;
+            width: 100%;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+        }
+
+        .mobile-sidebar .nav-links li a:hover {
+            padding-left: 1.2rem;
+            color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.08);
+        }
+
+        .mobile-sidebar .nav-links li a i {
+            width: 22px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        /* Mobile Toggle Button */
+        .mobile-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 0.5rem;
+            z-index: 2000;
+            position: relative;
+            background: transparent;
+            border: none;
+        }
+
+        .mobile-toggle span {
+            width: 26px;
+            height: 3px;
+            background: var(--primary-color);
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(7px, 7px);
+        }
+
+        .mobile-toggle.active span:nth-child(2) {
+            opacity: 0;
+            transform: translateX(-10px);
+        }
+
+        .mobile-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        /* FIXED: More specific selector to only hide desktop nav-links */
+        @media (max-width: 768px) {
+            .mobile-toggle {
+                display: flex !important;
+            }
+
+            /* Only hide the desktop navigation, not the mobile sidebar nav-links */
+            nav > .nav-links,
+            .search-container,
+            .auth-buttons,
+            .user-profile {
+                display: none !important;
+            }
+
+            /* Ensure mobile sidebar nav-links are visible */
+            .mobile-sidebar .nav-links {
+                display: flex !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .mobile-sidebar {
+                width: 280px;
+            }
+        }
+    </style>
 </head>
-
 <body>
-    <header>
+    <header id="header">
         <nav>
-            <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/books">Books</a></li>
-                <li><a href="/readingList">My Reading List</a></li>
-                <li><a href="/publish">Publish New Book</a></li>
-                <li><a href="/storebook">Your Book</a></li> <!-- Added Store Book link -->
+            <a href="/" class="logo">
+                <i class="fas fa-book-reader"></i> BookNote Hub
+            </a>
 
-                <!-- Search Form -->
-                <li>
-                    <form id="searchForm" action="/books" method="GET" class="search-form">
-                        <div class="search-container">
-                            <input name="title" type="text" id="searchInput" placeholder="Search books..." aria-label="Search books" required>
-                            <button type="submit" id="searchButton" aria-label="Search">
-                                <i class="fa fa-search"></i>
-                            </button>
-                        </div>
-                    </form>
-                </li>
-
-                <!-- Conditional Links based on User Authentication -->
-                <% if (user) { %>
-                    <li><a href="/logout">Logout</a></li> <!-- Logout link for authenticated user -->
-                    <li class="user-greeting">
-                        <!-- User Avatar and Username with Name-based Customization -->
-                        <div class="user-avatar">
-                            <% 
-                                const firstLetter = user.username.charAt(0).toLowerCase();
-                                let avatarSrc = ''; 
-                        
-                                if (firstLetter >= 'a' && firstLetter <= 'g') { 
-                                    avatarSrc = 'https://cdn-icons-png.flaticon.com/512/2921/2921826.png'; // Avatar for A-G
-                                } else if (firstLetter >= 'h' && firstLetter <= 'm') { 
-                                    avatarSrc = 'https://cdn-icons-png.flaticon.com/512/2921/2921837.png'; // Avatar for H-M
-                                } else if (firstLetter >= 'n' && firstLetter <= 't') { 
-                                    avatarSrc = 'https://cdn-icons-png.flaticon.com/512/2921/2921828.png'; // Avatar for N-T
-                                } else { 
-                                    avatarSrc = 'https://cdn-icons-png.flaticon.com/512/2921/2921840.png'; // Avatar for other letters
-                                }
-                            %>
-                            <img src="<%= avatarSrc %>" alt="User Avatar" class="avatar-img">
-                        </div>
-                        
-                        <span>Welcome, <%= user.username %>!</span>
-                    </li> <!-- Greeting the logged-in user -->
-                <% } else { %>
-                    <li><a href="/signup">Sign Up</a></li> <!-- Sign Up link -->
-                    <li><a href="/signin">Sign In</a></li> <!-- Sign In link -->
-                <% } %>
+            <!-- Desktop Navigation -->
+            <ul class="nav-links">
+                <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="/books"><i class="fas fa-book"></i> Browse Books</a></li>
+                <li><a href="/readingList"><i class="fas fa-list"></i> Reading List</a></li>
+                <li><a href="/publish"><i class="fas fa-plus-circle"></i> Publish</a></li>
+                <li><a href="/storebook"><i class="fas fa-store"></i> My Books</a></li>
             </ul>
+
+            <% if (user) { %>
+                <!-- User Profile with Dropdown -->
+                <div class="user-profile">
+                    <div class="profile-trigger" id="profileTrigger">
+                        <% 
+                            let avatarSrc = '';
+                            if (user.profile_image) {
+                                avatarSrc = user.profile_image;
+                            } else {
+                                const firstLetter = user.username.charAt(0).toLowerCase();
+                                if (firstLetter >= 'a' && firstLetter <= 'g') { 
+                                    avatarSrc = 'https://cdn-icons-png.flaticon.com/512/2921/2921826.png';
+                                } else if (firstLetter >= 'h' && firstLetter <= 'm') { 
+                                    avatarSrc = 'https://cdn-icons-png.flaticon.com/512/2921/2921837.png';
+                                } else if (firstLetter >= 'n' && firstLetter <= 't') { 
+                                    avatarSrc = 'https://cdn-icons-png.flaticon.com/512/2921/2921828.png';
+                                } else { 
+                                    avatarSrc = 'https://cdn-icons-png.flaticon.com/512/2921/2921840.png';
+                                }
+                            }
+                        %>
+                        <img src="<%= avatarSrc %>" alt="Avatar" class="avatar-img" id="headerAvatar">
+                        <span class="username"><%= user.username %></span>
+                        <i class="fas fa-chevron-down dropdown-arrow"></i>
+                    </div>
+
+                    <div class="dropdown-menu" id="dropdownMenu">
+                        <a href="/profile" class="dropdown-item">
+                            <i class="fas fa-user"></i>
+                            <span>My Profile</span>
+                        </a>
+                        <a href="/storebook" class="dropdown-item">
+                            <i class="fas fa-book"></i>
+                            <span>My Books</span>
+                        </a>
+                        <a href="/readingList" class="dropdown-item">
+                            <i class="fas fa-bookmark"></i>
+                            <span>Reading List</span>
+                        </a>
+                      
+                        <a href="/logout" class="dropdown-item logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                </div>
+            <% } else { %>
+                <!-- Auth Buttons -->
+                <div class="auth-buttons">
+                    <a href="/signin" class="btn btn-signin">Sign In</a>
+                    <a href="/signup" class="btn btn-signup">Sign Up</a>
+                </div>
+            <% } %>
+
+            <!-- Mobile Toggle -->
+            <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </nav>
     </header>
 
-    <!-- Main Content -->
-    <main>
-        <% if (title === '/') { %> <!-- Only show dashboard content if on the dashboard page -->
-            <div class="dashboard-container">
-                <h1>Welcome to Your Dashboard</h1>
-                <% if (user) { %>
-                    <div class="user-info">
-                        <h2>Hello, <%= user.username %>!</h2>
-                        <p>Manage your books, view your reading list, and more.</p>
-                    </div>
-                <% } else { %>
-                    <p>Please <a href="/signin">sign in</a> to access your dashboard.</p>
-                <% } %>
+    <!-- Sidebar Overlay -->
+   <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Mobile Sidebar -->
+     <div class="mobile-sidebar" id="mobileSidebar">
+        <% if (user) { %>
+             <div class="mobile-sidebar-header">
+                <% 
+                    let mobileAvatarSrc = '';
+                    if (user.profile_image) {
+                        mobileAvatarSrc = user.profile_image;
+                    } else {
+                        const firstLetter = user.username.charAt(0).toLowerCase();
+                        if (firstLetter >= 'a' && firstLetter <= 'g') { 
+                            mobileAvatarSrc = 'https://cdn-icons-png.flaticon.com/512/2921/2921826.png';
+                        } else if (firstLetter >= 'h' && firstLetter <= 'm') { 
+                            mobileAvatarSrc = 'https://cdn-icons-png.flaticon.com/512/2921/2921837.png';
+                        } else if (firstLetter >= 'n' && firstLetter <= 't') { 
+                            mobileAvatarSrc = 'https://cdn-icons-png.flaticon.com/512/2921/2921828.png';
+                        } else { 
+                            mobileAvatarSrc = 'https://cdn-icons-png.flaticon.com/512/2921/2921840.png';
+                        }
+                    }
+                %>
+                <img src="<%= mobileAvatarSrc %>" alt="Avatar" class="avatar-img">
+                <h3><%= user.username %></h3>
             </div>
         <% } %>
-    </main>
 
-    <script>
-        // Search button functionality
-        document.getElementById('searchForm').addEventListener('submit', function (event) {
-            const searchTerm = document.getElementById('searchInput').value.trim();
-            if (searchTerm === "") {
-                event.preventDefault(); // Prevent form submission if search term is empty
-                alert("Please enter a search term.");
+        <ul class="nav-links">
+            <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="/books"><i class="fas fa-book"></i> Browse Books</a></li>
+            <li><a href="/readingList"><i class="fas fa-list"></i> Reading List</a></li>
+            <li><a href="/publish"><i class="fas fa-plus-circle"></i> Publish</a></li>
+            <li><a href="/storebook"><i class="fas fa-store"></i> My Books</a></li>
+            
+            <% if (user) { %>
+                <li><a href="/profile"><i class="fas fa-user"></i> My Profile</a></li>
+               
+                <li><a href="/logout" style="color: #e53e3e;"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            <% } else { %>
+                <li><a href="/signin"><i class="fas fa-sign-in-alt"></i> Sign In</a></li>
+                <li><a href="/signup"><i class="fas fa-user-plus"></i> Sign Up</a></li>
+            <% } %>
+        </ul>
+    </div>
+
+<script>
+        // ==================== DROPDOWN TOGGLE ====================
+        const profileTrigger = document.getElementById('profileTrigger');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+
+        if (profileTrigger && dropdownMenu) {
+            profileTrigger.addEventListener('click', function(e) {
+                e.stopPropagation();
+                dropdownMenu.classList.toggle('active');
+                profileTrigger.classList.toggle('active');
+            });
+
+            document.addEventListener('click', function(event) {
+                if (!profileTrigger.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                    dropdownMenu.classList.remove('active');
+                    profileTrigger.classList.remove('active');
+                }
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && dropdownMenu.classList.contains('active')) {
+                    dropdownMenu.classList.remove('active');
+                    profileTrigger.classList.remove('active');
+                }
+            });
+        }
+
+        // ==================== MOBILE SIDEBAR TOGGLE ====================
+        const mobileToggle = document.getElementById('mobileToggle');
+        const mobileSidebar = document.getElementById('mobileSidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const body = document.body;
+
+        function openSidebar() {
+            mobileSidebar.classList.add('active');
+            sidebarOverlay.classList.add('active');
+            mobileToggle.classList.add('active');
+            body.classList.add('sidebar-open');
+        }
+
+        function closeSidebar() {
+            mobileSidebar.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+            mobileToggle.classList.remove('active');
+            body.classList.remove('sidebar-open');
+        }
+
+        function toggleSidebar(e) {
+            if (e) e.stopPropagation();
+            
+            if (mobileSidebar.classList.contains('active')) {
+                closeSidebar();
+            } else {
+                openSidebar();
             }
+        }
+
+        if (mobileToggle) {
+            mobileToggle.addEventListener('click', toggleSidebar);
+        }
+
+        if (sidebarOverlay) {
+            sidebarOverlay.addEventListener('click', function(e) {
+                e.stopPropagation();
+                closeSidebar();
+            });
+        }
+
+        const sidebarLinks = document.querySelectorAll('.mobile-sidebar .nav-links a');
+        sidebarLinks.forEach(function(link) {
+            link.addEventListener('click', function() {
+                setTimeout(function() {
+                    closeSidebar();
+                }, 200);
+            });
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && mobileSidebar.classList.contains('active')) {
+                closeSidebar();
+            }
+        });
+
+        // ==================== HEADER SCROLL EFFECT ====================
+        let lastScroll = 0;
+        const header = document.getElementById('header');
+
+        window.addEventListener('scroll', function() {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+
+            lastScroll = currentScroll;
         });
     </script>
 </body>
-
 </html>

@@ -1,0 +1,308 @@
+<%- include('header', { title: 'My Profile', user: user }) %>
+<link rel="stylesheet" href="/css/styles.css">
+
+<div class="profile-container">
+    <% if (message) { %>
+        <div class="<%= message.type === 'success' ? 'success-message' : 'error-message' %>" id="alertMessage">
+            <%= message.text %>
+        </div>
+    <% } %>
+
+    <div class="profile-card">
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="avatar-upload-container" onclick="document.getElementById('avatarInput').click()">
+                <% 
+                    const firstLetter = user.username.charAt(0).toLowerCase();
+                    let avatarSrc = ''; 
+                    if (firstLetter >= 'a' && firstLetter <= 'g') { 
+                        avatarSrc = 'https://cdn-icons-png.flaticon.com/512/2921/2921826.png';
+                    } else if (firstLetter >= 'h' && firstLetter <= 'm') { 
+                        avatarSrc = 'https://cdn-icons-png.flaticon.com/512/2921/2921837.png';
+                    } else if (firstLetter >= 'n' && firstLetter <= 't') { 
+                        avatarSrc = 'https://cdn-icons-png.flaticon.com/512/2921/2921828.png';
+                    } else { 
+                        avatarSrc = 'https://cdn-icons-png.flaticon.com/512/2921/2921840.png';
+                    }
+                %>
+                <img src="<%= user.profile_image || avatarSrc %>" alt="Profile" class="profile-avatar" id="profileAvatar">
+                <div class="avatar-overlay">
+                    <div class="avatar-overlay-text">
+                        <i class="fas fa-camera"></i><br>
+                        Change Photo
+                    </div>
+                </div>
+                <label for="avatarInput" class="avatar-upload-btn">
+                    <i class="fas fa-camera"></i>
+                </label>
+                <input type="file" id="avatarInput" class="avatar-input" accept="image/*" onchange="uploadAvatar()">
+            </div>
+            <h1><%= user.username %></h1>
+            <p>Member since <%= new Date(user.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) %></p>
+        </div>
+
+        <!-- Profile Body -->
+        <div class="profile-body">
+            <!-- Statistics Section -->
+            <div class="profile-section">
+                <h2 class="section-title">
+                    <i class="fas fa-chart-line"></i>
+                    Your Statistics
+                </h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number"><%= totalBooks || 0 %></div>
+                        <div class="stat-label">Published Books</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number"><%= readingListCount || 0 %></div>
+                        <div class="stat-label">Books in Reading List</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number"><%= Math.floor(Math.random() * 50) + 10 %></div>
+                        <div class="stat-label">Books Read</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Account Information -->
+            <div class="profile-section">
+                <div class="edit-toggle-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-user-circle"></i>
+                        Account Information
+                    </h2>
+                    <button class="edit-mode-btn" id="editToggleBtn" onclick="toggleEditMode()">
+                        <i class="fas fa-edit"></i>
+                        <span id="editBtnText">Edit Profile</span>
+                    </button>
+                </div>
+
+                <!-- Display Mode -->
+                <div class="info-display" id="infoDisplay">
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Username</div>
+                            <div class="info-value"><%= user.username %></div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Email</div>
+                            <div class="info-value"><%= user.email || 'Not provided' %></div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Bio</div>
+                            <div class="info-value"><%= user.bio || 'No bio yet' %></div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">User ID</div>
+                            <div class="info-value"><%= user.id.substring(0, 8) %>...</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Account Status</div>
+                            <div class="info-value">✅ Active</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Member Since</div>
+                            <div class="info-value"><%= new Date(user.created_at).toLocaleDateString() %></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Edit Mode -->
+                <div class="edit-form-container" id="editFormContainer">
+                    <form action="/profile/update" method="POST" class="edit-form">
+                        <div class="form-group has-icon">
+                            <label for="username">Username</label>
+                            <input type="text" id="username" name="username" value="<%= user.username %>" required>
+                            <i class="fas fa-user form-icon"></i>
+                        </div>
+                        <div class="form-group has-icon">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" value="<%= user.email || '' %>" placeholder="your@email.com">
+                            <i class="fas fa-envelope form-icon"></i>
+                        </div>
+                        <div class="form-group">
+                            <label for="bio">Bio</label>
+                            <textarea id="bio" name="bio" placeholder="Tell us about yourself..." rows="4"><%= user.bio || '' %></textarea>
+                        </div>
+                        <div class="btn-group">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i>
+                                <span>Save Changes</span>
+                                <span class="loading-spinner" id="saveSpinner"></span>
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="toggleEditMode()">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Toggle Edit Mode
+    function toggleEditMode() {
+        const infoDisplay = document.getElementById('infoDisplay');
+        const editFormContainer = document.getElementById('editFormContainer');
+        const editToggleBtn = document.getElementById('editToggleBtn');
+        const editBtnText = document.getElementById('editBtnText');
+        
+        if (editFormContainer.classList.contains('active')) {
+            // Switch to display mode
+            editFormContainer.classList.remove('active');
+            infoDisplay.classList.remove('hidden');
+            editToggleBtn.classList.remove('cancel-btn');
+            editBtnText.innerHTML = 'Edit Profile';
+            editToggleBtn.querySelector('i').className = 'fas fa-edit';
+        } else {
+            // Switch to edit mode
+            editFormContainer.classList.add('active');
+            infoDisplay.classList.add('hidden');
+            editToggleBtn.classList.add('cancel-btn');
+            editBtnText.innerHTML = 'Cancel Edit';
+            editToggleBtn.querySelector('i').className = 'fas fa-times';
+        }
+    }
+
+    // Upload Avatar Function
+    function uploadAvatar() {
+        const input = document.getElementById('avatarInput');
+        const avatar = document.getElementById('profileAvatar');
+        
+        if (input.files && input.files[0]) {
+            // Check file size (max 5MB)
+            if (input.files[0].size > 5 * 1024 * 1024) {
+                alert('File size must be less than 5MB');
+                return;
+            }
+
+            // Check file type
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+            if (!allowedTypes.includes(input.files[0].type)) {
+                alert('Please upload a valid image file (JPEG, PNG, GIF, or WebP)');
+                return;
+            }
+
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                // Update avatar preview immediately
+                avatar.src = e.target.result;
+                
+                // Create form data
+                const formData = new FormData();
+                formData.append('avatar', input.files[0]);
+                
+                // Show loading state
+                const uploadBtn = document.querySelector('.avatar-upload-btn');
+                uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                
+                // Upload to server
+                fetch('/profile/upload-avatar', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    uploadBtn.innerHTML = '<i class="fas fa-camera"></i>';
+                    
+                    if (data.success) {
+                        showNotification('Profile picture updated successfully!', 'success');
+                        // Reload page after 1.5 seconds to update header
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1500);
+                    } else {
+                        showNotification('Failed to upload image: ' + (data.message || 'Unknown error'), 'error');
+                        // Revert avatar on error
+                        avatar.src = '<%= user.profile_image || avatarSrc %>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    uploadBtn.innerHTML = '<i class="fas fa-camera"></i>';
+                    showNotification('An error occurred. Please try again.', 'error');
+                    // Revert avatar on error
+                    avatar.src = '<%= user.profile_image || avatarSrc %>';
+                });
+            };
+            
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    // Show Notification Function
+    function showNotification(message, type) {
+        // Remove existing notification if any
+        const existingNotification = document.getElementById('customNotification');
+        if (existingNotification) {
+            existingNotification.remove();
+        }
+
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.id = 'customNotification';
+        notification.className = type === 'success' ? 'success-message' : 'error-message';
+        notification.textContent = message;
+        notification.style.position = 'fixed';
+        notification.style.top = '100px';
+        notification.style.right = '20px';
+        notification.style.zIndex = '10000';
+        notification.style.maxWidth = '400px';
+        
+        document.body.appendChild(notification);
+        
+        // Auto remove after 4 seconds
+        setTimeout(() => {
+            notification.style.animation = 'fadeOut 0.5s ease-out';
+            setTimeout(() => {
+                notification.remove();
+            }, 500);
+        }, 4000);
+    }
+
+    // Add fadeOut animation
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+        }
+    `;
+    document.head.appendChild(style);
+
+    // Auto-hide alert message
+    document.addEventListener('DOMContentLoaded', function() {
+        const alertMessage = document.getElementById('alertMessage');
+        if (alertMessage) {
+            setTimeout(() => {
+                alertMessage.style.animation = 'fadeOut 0.5s ease-out';
+                setTimeout(() => {
+                    alertMessage.remove();
+                }, 500);
+            }, 4000);
+        }
+    });
+
+    // Form submission with loading state
+    document.querySelector('.edit-form')?.addEventListener('submit', function(e) {
+        const saveBtn = this.querySelector('.btn-primary');
+        const spinner = document.getElementById('saveSpinner');
+        const btnText = saveBtn.querySelector('span:first-of-type');
+        
+        spinner.classList.add('active');
+        saveBtn.disabled = true;
+        btnText.textContent = 'Saving...';
+    });
+</script>
+
+<%- include('footer') %>

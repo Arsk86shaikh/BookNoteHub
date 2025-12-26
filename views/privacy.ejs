@@ -1,0 +1,537 @@
+<%- include('header', { title: 'Privacy Policy', user: user }) %>
+
+<style>
+    .privacy-container {
+        max-width: 900px;
+        margin: 100px auto 40px;
+        padding: 0 2rem;
+    }
+
+    .privacy-hero {
+        text-align: center;
+        padding: 60px 40px;
+        background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
+        border-radius: 24px;
+        margin-bottom: 3rem;
+        position: relative;
+        overflow: hidden;
+        animation: fadeInDown 0.6s ease-out;
+    }
+
+    .privacy-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+    }
+
+    .privacy-hero-icon {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        color: white;
+        font-size: 2.5rem;
+        box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+    }
+
+    .privacy-hero h1 {
+        font-size: 3rem;
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 1rem;
+        font-weight: 800;
+    }
+
+    .privacy-hero-subtitle {
+        color: var(--text-medium);
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+    }
+
+    .privacy-hero-date {
+        color: var(--text-light);
+        font-size: 0.95rem;
+        font-weight: 600;
+    }
+
+    .privacy-content {
+        background: white;
+        border-radius: 24px;
+        padding: 3rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(99, 102, 241, 0.1);
+        animation: fadeInUp 0.8s ease-out;
+    }
+
+    .privacy-nav {
+        background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+        border-radius: 16px;
+        padding: 1.5rem;
+        margin-bottom: 2.5rem;
+        border: 2px solid rgba(99, 102, 241, 0.1);
+    }
+
+    .privacy-nav h3 {
+        color: var(--text-dark);
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+        font-weight: 700;
+    }
+
+    .privacy-nav ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .privacy-nav li {
+        margin-bottom: 0.8rem;
+    }
+
+    .privacy-nav a {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+        padding: 8px 12px;
+        border-radius: 8px;
+    }
+
+    .privacy-nav a:hover {
+        background: rgba(99, 102, 241, 0.1);
+        transform: translateX(5px);
+    }
+
+    .privacy-section {
+        margin-bottom: 3rem;
+        scroll-margin-top: 120px;
+    }
+
+    .privacy-section h2 {
+        font-size: 2rem;
+        color: var(--text-dark);
+        margin-bottom: 1.5rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding-bottom: 1rem;
+        border-bottom: 3px solid transparent;
+        border-image: linear-gradient(90deg, var(--primary-color), var(--secondary-color)) 1;
+    }
+
+    .privacy-section h2 i {
+        color: var(--primary-color);
+    }
+
+    .privacy-section h3 {
+        font-size: 1.4rem;
+        color: var(--text-dark);
+        margin: 2rem 0 1rem;
+        font-weight: 700;
+    }
+
+    .privacy-section p {
+        color: var(--text-medium);
+        line-height: 1.8;
+        margin-bottom: 1.2rem;
+        font-size: 1.05rem;
+    }
+
+    .privacy-section ul,
+    .privacy-section ol {
+        color: var(--text-medium);
+        line-height: 1.8;
+        margin-bottom: 1.5rem;
+        padding-left: 2rem;
+    }
+
+    .privacy-section li {
+        margin-bottom: 0.8rem;
+    }
+
+    .privacy-highlight {
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+        padding: 1.5rem;
+        border-radius: 12px;
+        border-left: 4px solid var(--primary-color);
+        margin: 1.5rem 0;
+    }
+
+    .privacy-highlight p {
+        margin: 0;
+    }
+
+    .privacy-highlight strong {
+        color: var(--primary-color);
+    }
+
+    .privacy-contact {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        padding: 2.5rem;
+        border-radius: 20px;
+        text-align: center;
+        margin-top: 3rem;
+        box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+    }
+
+    .privacy-contact h3 {
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+        color: white;
+    }
+
+    .privacy-contact p {
+        margin-bottom: 1.5rem;
+        opacity: 0.95;
+        color: white;
+    }
+
+    .privacy-contact-btn {
+        background: white;
+        color: var(--primary-color);
+        padding: 14px 32px;
+        border: none;
+        border-radius: 50px;
+        font-size: 1.05rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .privacy-contact-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .back-to-top {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        border: none;
+        border-radius: 50%;
+        font-size: 1.2rem;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        z-index: 1000;
+    }
+
+    .back-to-top.visible {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .back-to-top:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(99, 102, 241, 0.5);
+    }
+
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .privacy-container {
+            padding: 0 1rem;
+            margin-top: 90px;
+        }
+
+        .privacy-hero {
+            padding: 40px 25px;
+        }
+
+        .privacy-hero h1 {
+            font-size: 2rem;
+        }
+
+        .privacy-content {
+            padding: 2rem 1.5rem;
+        }
+
+        .privacy-section h2 {
+            font-size: 1.6rem;
+        }
+
+        .back-to-top {
+            bottom: 20px;
+            right: 20px;
+            width: 45px;
+            height: 45px;
+        }
+    }
+</style>
+
+<div class="privacy-container">
+    <!-- Hero Section -->
+    <div class="privacy-hero">
+        <div class="privacy-hero-icon">
+            <i class="fas fa-shield-alt"></i>
+        </div>
+        <h1>Privacy Policy</h1>
+        <p class="privacy-hero-subtitle">Your privacy is important to us</p>
+        <p class="privacy-hero-date">Last Updated: December 26, 2024</p>
+    </div>
+
+    <!-- Main Content -->
+    <div class="privacy-content">
+        <!-- Table of Contents -->
+        <div class="privacy-nav">
+            <h3><i class="fas fa-list"></i> Table of Contents</h3>
+            <ul>
+                <li><a href="#introduction"><i class="fas fa-chevron-right"></i> Introduction</a></li>
+                <li><a href="#information-we-collect"><i class="fas fa-chevron-right"></i> Information We Collect</a></li>
+                <li><a href="#how-we-use"><i class="fas fa-chevron-right"></i> How We Use Your Information</a></li>
+                <li><a href="#data-sharing"><i class="fas fa-chevron-right"></i> Data Sharing</a></li>
+                <li><a href="#data-security"><i class="fas fa-chevron-right"></i> Data Security</a></li>
+                <li><a href="#your-rights"><i class="fas fa-chevron-right"></i> Your Rights</a></li>
+                <li><a href="#cookies"><i class="fas fa-chevron-right"></i> Cookies</a></li>
+                <li><a href="#changes"><i class="fas fa-chevron-right"></i> Changes to Policy</a></li>
+                <li><a href="#contact"><i class="fas fa-chevron-right"></i> Contact Us</a></li>
+            </ul>
+        </div>
+
+        <!-- Introduction -->
+        <section class="privacy-section" id="introduction">
+            <h2><i class="fas fa-info-circle"></i> Introduction</h2>
+            <p>
+                Welcome to BookNote Hub! This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website and use our services. Please read this privacy policy carefully.
+            </p>
+            <div class="privacy-highlight">
+                <p><strong>Important:</strong> By using BookNote Hub, you agree to the collection and use of information in accordance with this policy. If you do not agree with our policies and practices, please do not use our services.</p>
+            </div>
+        </section>
+
+        <!-- Information We Collect -->
+        <section class="privacy-section" id="information-we-collect">
+            <h2><i class="fas fa-database"></i> Information We Collect</h2>
+            
+            <h3>Personal Information</h3>
+            <p>We may collect personal information that you provide to us, including:</p>
+            <ul>
+                <li><strong>Account Information:</strong> Username, email address, and password</li>
+                <li><strong>Profile Information:</strong> Profile picture, bio, and reading preferences</li>
+                <li><strong>Content:</strong> Books you publish, notes, summaries, and comments</li>
+                <li><strong>Communication:</strong> Messages you send through our platform</li>
+            </ul>
+
+            <h3>Automatically Collected Information</h3>
+            <ul>
+                <li><strong>Usage Data:</strong> Pages visited, time spent, and interactions</li>
+                <li><strong>Device Information:</strong> Browser type, IP address, and operating system</li>
+                <li><strong>Cookies:</strong> Small data files stored on your device</li>
+                <li><strong>Location Data:</strong> General location based on IP address</li>
+            </ul>
+        </section>
+
+        <!-- How We Use Your Information -->
+        <section class="privacy-section" id="how-we-use">
+            <h2><i class="fas fa-cogs"></i> How We Use Your Information</h2>
+            <p>We use the information we collect for various purposes:</p>
+            <ol>
+                <li><strong>Provide Services:</strong> To create and manage your account, display content, and enable features</li>
+                <li><strong>Improve Platform:</strong> To analyze usage patterns and enhance user experience</li>
+                <li><strong>Communication:</strong> To send updates, newsletters, and respond to inquiries</li>
+                <li><strong>Security:</strong> To detect fraud, protect against abuse, and ensure platform safety</li>
+                <li><strong>Personalization:</strong> To recommend books and customize your experience</li>
+                <li><strong>Legal Compliance:</strong> To comply with legal obligations and enforce our terms</li>
+            </ol>
+        </section>
+
+        <!-- Data Sharing -->
+        <section class="privacy-section" id="data-sharing">
+            <h2><i class="fas fa-share-alt"></i> Data Sharing and Disclosure</h2>
+            <p>We do not sell your personal information. We may share your information in the following circumstances:</p>
+            
+            <h3>With Your Consent</h3>
+            <p>We will share your information when you give us explicit permission to do so.</p>
+
+            <h3>Service Providers</h3>
+            <p>We may share information with third-party service providers who assist us in:</p>
+            <ul>
+                <li>Hosting and maintaining our servers</li>
+                <li>Analytics and performance monitoring</li>
+                <li>Email delivery services</li>
+                <li>Payment processing (if applicable)</li>
+            </ul>
+
+            <h3>Legal Requirements</h3>
+            <p>We may disclose information if required by law or to:</p>
+            <ul>
+                <li>Comply with legal processes</li>
+                <li>Protect our rights and property</li>
+                <li>Prevent illegal activity</li>
+                <li>Protect user safety</li>
+            </ul>
+        </section>
+
+        <!-- Data Security -->
+        <section class="privacy-section" id="data-security">
+            <h2><i class="fas fa-lock"></i> Data Security</h2>
+            <p>We implement appropriate technical and organizational measures to protect your personal information:</p>
+            <ul>
+                <li><strong>Encryption:</strong> We use SSL/TLS encryption to protect data in transit</li>
+                <li><strong>Secure Storage:</strong> Data is stored on secure servers with access controls</li>
+                <li><strong>Password Protection:</strong> Passwords are hashed and salted</li>
+                <li><strong>Regular Audits:</strong> We conduct security assessments and updates</li>
+                <li><strong>Access Controls:</strong> Limited employee access to personal data</li>
+            </ul>
+            <div class="privacy-highlight">
+                <p><strong>Note:</strong> While we strive to protect your information, no method of transmission over the internet is 100% secure. We cannot guarantee absolute security.</p>
+            </div>
+        </section>
+
+        <!-- Your Rights -->
+        <section class="privacy-section" id="your-rights">
+            <h2><i class="fas fa-user-shield"></i> Your Privacy Rights</h2>
+            <p>You have the following rights regarding your personal information:</p>
+            <ul>
+                <li><strong>Access:</strong> Request a copy of your personal data</li>
+                <li><strong>Correction:</strong> Update or correct inaccurate information</li>
+                <li><strong>Deletion:</strong> Request deletion of your account and data</li>
+                <li><strong>Data Portability:</strong> Export your data in a portable format</li>
+                <li><strong>Opt-Out:</strong> Unsubscribe from marketing communications</li>
+                <li><strong>Object:</strong> Object to certain data processing activities</li>
+            </ul>
+            <p>To exercise these rights, please contact us at <a href="mailto:privacy@booknotehub.com" style="color: var(--primary-color); font-weight: 600;">privacy@booknotehub.com</a></p>
+        </section>
+
+        <!-- Cookies -->
+        <section class="privacy-section" id="cookies">
+            <h2><i class="fas fa-cookie-bite"></i> Cookies and Tracking</h2>
+            <p>We use cookies and similar tracking technologies to enhance your experience:</p>
+            
+            <h3>Types of Cookies We Use</h3>
+            <ul>
+                <li><strong>Essential Cookies:</strong> Required for the website to function properly</li>
+                <li><strong>Analytics Cookies:</strong> Help us understand how visitors use our site</li>
+                <li><strong>Preference Cookies:</strong> Remember your settings and preferences</li>
+                <li><strong>Marketing Cookies:</strong> Track your activity for personalized content</li>
+            </ul>
+
+            <p>You can control cookies through your browser settings. Note that disabling cookies may affect website functionality.</p>
+        </section>
+
+        <!-- Changes to Policy -->
+        <section class="privacy-section" id="changes">
+            <h2><i class="fas fa-sync-alt"></i> Changes to This Policy</h2>
+            <p>
+                We may update this Privacy Policy from time to time. We will notify you of any changes by:
+            </p>
+            <ul>
+                <li>Posting the new Privacy Policy on this page</li>
+                <li>Updating the "Last Updated" date</li>
+                <li>Sending an email notification for significant changes</li>
+            </ul>
+            <p>
+                We encourage you to review this Privacy Policy periodically for any changes. Your continued use of the service after changes are posted constitutes acceptance of those changes.
+            </p>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="privacy-section" id="contact">
+            <h2><i class="fas fa-envelope"></i> Contact Information</h2>
+            <p>If you have any questions or concerns about this Privacy Policy, please contact us:</p>
+            <ul>
+                <li><strong>Email:</strong> <a href="mailto:privacy@booknotehub.com" style="color: var(--primary-color); font-weight: 600;">privacy@booknotehub.com</a></li>
+                <li><strong>Website:</strong> <a href="/contact" style="color: var(--primary-color); font-weight: 600;">Contact Form</a></li>
+                <li><strong>Response Time:</strong> We aim to respond within 48 hours</li>
+            </ul>
+        </section>
+
+        <!-- Contact CTA -->
+        <div class="privacy-contact">
+            <h3>Have Questions?</h3>
+            <p>Our privacy team is here to help you understand how we protect your data</p>
+            <a href="/contact" class="privacy-contact-btn">
+                <i class="fas fa-paper-plane"></i>
+                Contact Us
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Back to Top Button -->
+<button class="back-to-top" id="backToTop">
+    <i class="fas fa-arrow-up"></i>
+</button>
+
+<script>
+    // Back to Top Button
+    const backToTopBtn = document.getElementById('backToTop');
+    
+    window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 300) {
+            backToTopBtn.classList.add('visible');
+        } else {
+            backToTopBtn.classList.remove('visible');
+        }
+    });
+    
+    backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
+    // Smooth scroll for navigation links
+    document.querySelectorAll('.privacy-nav a').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = link.getAttribute('href');
+            const targetSection = document.querySelector(targetId);
+            
+            if (targetSection) {
+                targetSection.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+</script>
+
+<%- include('footer') %>

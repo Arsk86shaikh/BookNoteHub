@@ -2,9 +2,11 @@
   href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
   rel="stylesheet"
 />
-<link rel="stylesheet" href="/src/public/css/styles.css">
-
 <%- include('header', { title: 'BookNote Hub' }) %>
+<style>
+  
+</style>
+
 <main>
     <section class="welcome-section">
         <h1>Welcome to BookNote Hub!</h1>
@@ -58,7 +60,7 @@
                 <li><a href="https://blog.hubspot.com/marketing/atomic-habits-review">Actionable steps for positive change</a></li>
             </ul>
             <div class="buttons">
-                <button class="explore-btn"><a href="https://openlibrary.org/works/OL17930368W/Atomic_Habits">Open Pdf</a></button>
+                <button class="add-book-btn"><a href="https://openlibrary.org/works/OL17930368W/Atomic_Habits">Open Pdf</a></button>
                 <button class="add-book-btn"><a>Add Book</a></button>
             </div>
         </div>
@@ -78,7 +80,7 @@
                 <li><a href="https://www.psychologytoday.com/us/blog/the-moment-youth/201811/dont-worry-be-happy">Uplifting stories</a></li>
             </ul>
             <div class="buttons">
-                <button class="explore-btn"><a href="https://openlibrary.org/works/OL15539237W/Don%27t_worry_be_happy%21">Open Pdf</a></button>
+                <button class="add-book-btn"><a href="https://openlibrary.org/works/OL15539237W/Don%27t_worry_be_happy%21">Open Pdf</a></button>
                 <button class="add-book-btn"><a>Add Book</a></button>
             </div>
         </div>
@@ -98,7 +100,7 @@
                 <li><a href="https://www.richardcollison.net/lessons-peaceful-warrior/">Life lessons</a></li>
             </ul>
             <div class="buttons">
-                <button class="explore-btn"><a href="https://openlibrary.org/works/OL19304349W/The_way_of_peace">Open Pdf</a></button>
+                <button class="add-book-btn"><a href="https://openlibrary.org/works/OL19304349W/The_way_of_peace">Open Pdf</a></button>
                 <button class="add-book-btn"><a>Add Book</a></button>
             </div>
         </div>
@@ -124,7 +126,7 @@
                     <div class="offer-content">
                         <h3><%= card.title %></h3>
                         <p><%= card.description %></p>
-                        <a href="<%= card.viewLink %>" class="offer-btn">Explore Now</a>
+                        <a href="<%= card.viewLink %>" class="explore-btn">Explore Now</a>
                     </div>
                 </div>
             <% }) %>
@@ -164,66 +166,186 @@
 
 
 <script>
-    document.querySelector('.explore-btn').addEventListener('click', function() {
-        alert('Discover more details and reviews about this book!');
-        // Optionally, link to a new page with more details
+    // Wait for DOM to be fully loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        // ==================== Explore Button Handlers ====================
+        // Handle multiple explore buttons
+        const exploreButtons = document.querySelectorAll('.explore-btn');
+        exploreButtons.forEach(function(btn) {
+            // Skip if it's a link (anchor tag)
+            if (btn.tagName !== 'A') {
+                btn.addEventListener('click', function() {
+                    alert('Discover more details and reviews about this book!');
+                });
+            }
+        });
+
+        // ==================== Add Book Button Handlers ====================
+        // Handle multiple add-book buttons
+        const addBookButtons = document.querySelectorAll('.add-book-btn');
+        addBookButtons.forEach(function(btn) {
+            // Skip if already has onclick attribute
+            if (!btn.hasAttribute('onclick')) {
+                btn.addEventListener('click', function() {
+                    alert('This book has been successfully added to your collection!');
+                });
+            }
+        });
+
+        // ==================== Explore More Button Animation ====================
+        const exploreMoreBtn = document.querySelector('.explore-more-btn');
+        if (exploreMoreBtn) {
+            exploreMoreBtn.addEventListener('mouseover', function() {
+                const arrow = exploreMoreBtn.querySelector('.arrow');
+                if (arrow) {
+                    arrow.style.marginLeft = '12px';
+                }
+            });
+
+            exploreMoreBtn.addEventListener('mouseout', function() {
+                const arrow = exploreMoreBtn.querySelector('.arrow');
+                if (arrow) {
+                    arrow.style.marginLeft = '5px';
+                }
+            });
+        }
+
+        // ==================== Carousel Functionality ====================
+        const carousel = document.querySelector('.carousel');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        // Check if carousel elements exist
+        if (carousel && prevBtn && nextBtn) {
+            let currentIndex = 0;
+            let cardsToShow = 3;
+            let cardWidth = 340; // Card width + gap
+            let totalCards = 0;
+
+            // Initialize carousel
+            function initCarousel() {
+                const cards = carousel.querySelectorAll('.carousel-card');
+                totalCards = cards.length;
+                
+                // Update cards to show based on screen size
+                updateCardsToShow();
+                
+                // Set initial button states
+                updateButtonStates();
+                
+                // Add resize listener
+                window.addEventListener('resize', handleResize);
+            }
+
+            // Update cards to show based on screen width
+            function updateCardsToShow() {
+                const screenWidth = window.innerWidth;
+                
+                if (screenWidth <= 480) {
+                    cardsToShow = 1;
+                    cardWidth = carousel.offsetWidth;
+                } else if (screenWidth <= 768) {
+                    cardsToShow = 2;
+                    cardWidth = 300;
+                } else if (screenWidth <= 1024) {
+                    cardsToShow = 3;
+                    cardWidth = 340;
+                } else {
+                    cardsToShow = 3;
+                    cardWidth = 340;
+                }
+            }
+
+            // Handle window resize
+            function handleResize() {
+                const oldCardsToShow = cardsToShow;
+                updateCardsToShow();
+                
+                // Adjust current index if needed
+                if (oldCardsToShow !== cardsToShow) {
+                    currentIndex = Math.min(currentIndex, Math.max(0, totalCards - cardsToShow));
+                    moveCarousel();
+                }
+            }
+
+            // Move carousel to current index
+            function moveCarousel() {
+                const offset = -currentIndex * cardWidth;
+                carousel.style.transform = 'translateX(' + offset + 'px)';
+                updateButtonStates();
+            }
+
+            // Update button disabled states
+            function updateButtonStates() {
+                // Disable previous button at start
+                prevBtn.disabled = currentIndex === 0;
+                
+                // Disable next button at end
+                nextBtn.disabled = currentIndex >= totalCards - cardsToShow;
+                
+                // Add visual feedback
+                prevBtn.style.opacity = prevBtn.disabled ? '0.3' : '1';
+                nextBtn.style.opacity = nextBtn.disabled ? '0.3' : '1';
+            }
+
+            // Previous button click
+            prevBtn.addEventListener('click', function() {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    moveCarousel();
+                }
+            });
+
+            // Next button click
+            nextBtn.addEventListener('click', function() {
+                if (currentIndex < totalCards - cardsToShow) {
+                    currentIndex++;
+                    moveCarousel();
+                }
+            });
+
+            // Keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowLeft') {
+                    prevBtn.click();
+                } else if (e.key === 'ArrowRight') {
+                    nextBtn.click();
+                }
+            });
+
+            // Touch/Swipe support
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            carousel.addEventListener('touchstart', function(e) {
+                touchStartX = e.changedTouches[0].screenX;
+            });
+            
+            carousel.addEventListener('touchend', function(e) {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            });
+            
+            function handleSwipe() {
+                const swipeThreshold = 50;
+                const diff = touchStartX - touchEndX;
+                
+                if (Math.abs(diff) > swipeThreshold) {
+                    if (diff > 0) {
+                        // Swipe left - next
+                        nextBtn.click();
+                    } else {
+                        // Swipe right - previous
+                        prevBtn.click();
+                    }
+                }
+            }
+
+            // Initialize carousel
+            initCarousel();
+        }
     });
-
-    document.querySelector('.add-book-btn').addEventListener('click', function() {
-        alert('This book has been successfully added to your collection!');
-        // Optionally, add functionality to add the book to a user's reading list
-
-    });
-
-    document.querySelector('.explore-more-btn').addEventListener('mouseover', () => {
-  document.querySelector('.arrow').style.marginLeft = '12px';
-});
-
-document.querySelector('.explore-more-btn').addEventListener('mouseout', () => {
-  document.querySelector('.arrow').style.marginLeft = '5px';
-});
-
-
-
-
-const carousel = document.querySelector('.carousel');
-const prevBtn = document.getElementById('prevBtn');
-const nextBtn = document.getElementById('nextBtn');
-
-let scrollAmount = 0;
-
-prevBtn.addEventListener('click', () => {
-  scrollAmount -= 320; // Adjust based on card width + gap
-  carousel.style.transform = `translateX(${-scrollAmount}px)`;
-  checkCarouselBounds();
-});
-
-nextBtn.addEventListener('click', () => {
-  scrollAmount += 320; // Adjust based on card width + gap
-  carousel.style.transform = `translateX(${-scrollAmount}px)`;
-  checkCarouselBounds();
-});
-
-function checkCarouselBounds() {
-  const maxScroll = carousel.scrollWidth - carousel.clientWidth;
-  if (scrollAmount <= 0) {
-    scrollAmount = 0;
-    prevBtn.disabled = true;
-  } else {
-    prevBtn.disabled = false;
-  }
-  if (scrollAmount >= maxScroll) {
-    scrollAmount = maxScroll;
-    nextBtn.disabled = true;
-  } else {
-    nextBtn.disabled = false;
-  }
-}
-
-// Initial setup
-checkCarouselBounds();
-
-
 </script>
 
 

@@ -142,6 +142,191 @@ app.get('/', (req, res) => {
     res.render('index', { books: [], data, user });
 });
 
+
+// Profile page route
+app.get('/profile', requireAuth, async (req, res) => {
+    const user = req.session.user;
+    
+    try {
+        // Get user statistics
+        const { count: totalBooks } = await supabase
+            .from('books')
+            .select('*', { count: 'exact', head: true })
+            .eq('user_id', user.id);
+
+        const { count: readingListCount } = await supabase
+            .from('read_list')
+            .select('*', { count: 'exact', head: true })
+            .eq('user_id', user.id);
+
+        // Get full user details
+        const { data: userData } = await supabase
+            .from('users')
+            .select('*')
+            .eq('id', user.id)
+            .single();
+
+        res.render('profile', {
+            user: userData,
+            totalBooks: totalBooks || 0,
+            readingListCount: readingListCount || 0,
+            message: null
+        });
+    } catch (error) {
+        console.error('Error loading profile:', error);
+        res.render('profile', {
+            user,
+            totalBooks: 0,
+            readingListCount: 0,
+            message: { type: 'error', text: 'Failed to load profile data' }
+        });
+    }
+});
+
+// Update profile route
+app.post('/profile/update', requireAuth, async (req, res) => {
+    const { username, email, bio } = req.body;
+    const userId = req.session.user.id;
+
+    try {
+        const { data, error } = await supabase
+            .from('users')
+            .update({ username, email, bio })
+            .eq('id', userId)
+            .select()
+            .single();
+
+        if (error) throw error;
+
+        // Update session
+        req.session.user.username = username;
+
+        res.redirect('/profile?message=Profile updated successfully');
+    } catch (error) {
+        console.error('Error updating profile:', error);
+        res.redirect('/profile?error=Failed to update profile');
+    }
+});
+
+// Avatar upload route
+app.post('/profile/upload-avatar', requireAuth, upload.single('avatar'), async (req, res) => {
+    try {
+        const userId = req.session.user.id;
+        const file = req.file;
+
+        console.log('📤 Uploading avatar for user:', userId);
+
+        if (!file) {
+            console.log('❌ No file uploaded');
+            return res.json({ success: false, message: 'No file uploaded' });
+        }
+
+        // Generate unique filename
+        const fileName = `avatar-${userId}-${Date.now()}.${file.mimetype.split('/')[1]}`;
+        console.log('📁 File name:', fileName);
+
+        // Upload to Supabase Storage
+        console.log('☁️ Uploading to Supabase storage...');
+        const { data, error } = await supabase.storage
+            .from('avatars')
+            .upload(fileName, file.buffer, {
+                contentType: file.mimetype,
+                upsert: true,
+                cacheControl: '3600'
+            });
+
+        if (error) {
+            console.error('❌ Upload error:', error);
+            throw error;
+        }
+
+        console.log('✅ Upload successful:', data);
+
+        // Get public URL
+        const { data: urlData } = supabase.storage
+            .from('avatars')
+            .getPublicUrl(fileName);
+
+        const publicUrl = urlData.publicUrl;
+        console.log('🔗 Public URL:', publicUrl);
+
+        // Update user profile in database
+        const { error: updateError } = await supabase
+            .from('users')
+            .update({ profile_image: publicUrl })
+            .eq('id', userId);
+
+        if (updateError) {
+            console.error('❌ Database update error:', updateError);
+            throw updateError;
+        }
+
+        // ✅ UPDATE SESSION WITH NEW PROFILE IMAGE
+        req.session.user.profile_image = publicUrl;
+        req.session.save((err) => {
+            if (err) {
+                console.error('❌ Session save error:', err);
+            }
+        });
+
+        console.log('✅ Profile and session updated successfully');
+        res.json({ success: true, url: publicUrl });
+
+    } catch (error) {
+        console.error('❌ Error uploading avatar:', error);
+        res.json({ 
+            success: false, 
+            message: error.message || 'Failed to upload avatar'
+        });
+    }
+});
+
+// Middleware to load full user data from database
+const loadUserData = async (req, res, next) => {
+    if (req.session.user) {
+        try {
+            const { data: userData, error } = await supabase
+                .from('users')
+                .select('id, username, profile_image, email, bio, created_at')
+                .eq('id', req.session.user.id)
+                .single();
+
+            if (userData && !error) {
+                req.session.user = userData;
+            }
+        } catch (error) {
+            console.error('Error loading user data:', error);
+        }
+    }
+    next();
+};
+
+// Apply middleware to all routes
+app.use(loadUserData);
+
+// Middleware to ensure user session has latest data
+const refreshUserSession = async (req, res, next) => {
+    if (req.session.user && req.session.user.id) {
+        try {
+            const { data: userData } = await supabase
+                .from('users')
+                .select('id, username, profile_image, email, bio, created_at')
+                .eq('id', req.session.user.id)
+                .single();
+
+            if (userData) {
+                req.session.user = { ...req.session.user, ...userData };
+            }
+        } catch (error) {
+            console.error('Error refreshing user session:', error);
+        }
+    }
+    next();
+};
+
+// Apply only to routes that render pages
+app.use(['/profile', '/storebook', '/readingList', '/publish', '/'], refreshUserSession);
+
 // Signup page
 app.get('/signup', (req, res) => {
     res.render('signup', { message: req.query.message || '' });
@@ -604,6 +789,14 @@ app.get('/books', async (req, res) => {
         console.error('❌ Error fetching books:', error);
         res.status(500).send('Error fetching books');
     }
+});
+
+
+
+// Privacy Policy Page
+app.get('/privacy', (req, res) => {
+    const user = req.session.userId ? users.find(u => u.id === req.session.userId) : null;
+    res.render('privacy', { user: user });
 });
 
 // ============================================================
