@@ -3,7 +3,7 @@
     {
       "image": "https://i0.wp.com/www.roomsneedlove.com/wp-content/uploads/2023/10/how-to-keep-track-of-your-reading-life-pin.png?resize=768%2C1152&ssl=1",
       "title": "Track Your Reads",
-      "link":"http://localhost:3000/readingList"
+      "link":"https://book-note-hub.vercel.app/readingList"
     },
     {
       "image": "https://www.notebooksapp.com/wp-content/uploads/2022/08/PDF-iPad.png",
@@ -13,17 +13,17 @@
     {
       "image": "https://pagesunbound.wordpress.com/wp-content/uploads/2022/02/how-i-discover-new-books-1.png",
       "title": "Discover New Books",
-      "link":"http://localhost:3000/books"
+      "link":"https://book-note-hub.vercel.app/books"
     },
     {
       "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSkaUXeluaA0qmv4yW7rBND7Y2JqhFqqyAvQ&sg",
       "title": "Connect with Readers",
-      "link":"http://localhost:3000/readingList"
+      "link":"https://book-note-hub.vercel.app/readingList"
     },
     {
       "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6R1k0DvhwNTQXmA62kbrKURUEAzOX_21NbQ&s",
       "title": "Join Our Community",
-      "link":"http://localhost:3000/signin"
+      "link":"https://book-note-hub.vercel.app/signin"
     }
   ],
   "offerCards": [
@@ -31,20 +31,20 @@
       "image": "https://images-platform.99static.com//yuSx_KKiMQ21rsbTzDXYa8CH12s=/421x201:1442x1222/fit-in/500x500/99designs-contests-attachments/137/137626/attachment_137626031",
       "title": "Exclusive Deal for Existing Users",
       "description": "To not be Exit ",
-      "viewLink": "http://localhost:3000/books?title=seeing+what+invisible"
+      "viewLink": "https://book-note-hub.vercel.app/books?title=seeing+what+invisible"
     },
     {
       "image": "https://png.pngtree.com/png-clipart/20220404/original/pngtree-cover-design-for-business-brochure-png-image_7509348.png",
       "title": "Welcome Offer for New Users",
       "description": "Sign up today and get enjoy a Ne books !",
-      "viewLink": "http://localhost:3000/books?title=corporate+design"
+      "viewLink": "https://book-note-hub.vercel.app/books?title=corporate+design"
      
     },
     {
       "image": "https://designerpeople.com//wp-content/uploads/2020/02/negative-space-book-cover-design-ideas-2.jpg",
       "title": "Popular Reads at Special site",
       "description": "Enjoy discounts on our top-rated books.",
-      "viewLink": "http://localhost:3000/books?title=the+man+in+the+woods"
+      "viewLink": "https://book-note-hub.vercel.app/books?title=the+man+in+the+woods"
     }
   ],
   "suggestions": [
