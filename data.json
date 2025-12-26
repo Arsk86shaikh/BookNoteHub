@@ -89,56 +89,56 @@
         "title": "The Pragmatic Programmer",
         "description": "Your journey to mastering software craftsmanship and problem-solving skills.",
         "image": "https://images-na.ssl-images-amazon.com/images/I/41as+WafrFL._SX376_BO1,204,203,200_.jpg",
-        "link": "http://localhost:3000/books?title=The+Pragmatic+Programmer"
+        "link": "https://book-note-hub.vercel.app/books?title=The+Pragmatic+Programmer"
       },
       {
         "id": 2,
         "title": "Clean Code",
         "description": "A handbook of agile software craftsmanship to write better code.",
         "image": "https://images-na.ssl-images-amazon.com/images/I/51b7XbfMIIL._SX374_BO1,204,203,200_.jpg",
-        "link": "http://localhost:3000/books?title=clean+code"
+        "link": "https://book-note-hub.vercel.app/books?title=clean+code"
       },
       {
         "id": 3,
         "title": "JavaScript: The Definitive Guide",
         "description": "Master the language of the web with this comprehensive JavaScript guide.",
         "image": "https://m.media-amazon.com/images/I/91hUer84PpL._SL1500_.jpg",
-        "link": "http://localhost:3000/books?title=javascript+%3A+The+definite+guide"
+        "link": "https://book-note-hub.vercel.app/books?title=javascript+%3A+The+definite+guide"
       },
       {
         "id": 4,
         "title": "Eloquent JavaScript",
         "description": "A modern introduction to programming with an emphasis on JavaScript.",
         "image": "https://eloquentjavascript.net/img/cover.jpg",
-        "link": "http://localhost:3000/books?title=eloquent+javascript"
+        "link": "https://book-note-hub.vercel.app/books?title=eloquent+javascript"
       },
       {
         "id": 5,
         "title": "Effective TypeScript",
         "description": "Learn TypeScript's advanced techniques and improve your JavaScript projects.",
         "image": "https://m.media-amazon.com/images/I/81sJB+PbfEL._SL1500_.jpg",
-        "link": "http://localhost:3000/books?title=typeScript"
+        "link": "https://book-note-hub.vercel.app/books?title=typeScript"
       },
       {
         "id": 6,
         "title": "Deep Learning with Python",
         "description": "Dive into deep learning and build powerful AI models with Python.",
         "image": "https://images.manning.com/360/480/resize/book/7/65fca1c-6826-472d-bbea-c1d4a7b3c570/Chollet-DLP-HI.png",
-        "link": "http://localhost:3000/books?title=Deep+Learning"
+        "link": "https://book-note-hub.vercel.app/books?title=Deep+Learning"
       },
       {
         "id": 7,
         "title": "Refactoring",
         "description": "Enhance your code's structure and readability through effective refactoring techniques.",
         "image": "https://martinfowler.com/books/refact2.jpg",
-        "link": "http://localhost:3000/books?title=Refactoring"
+        "link": "https://book-note-hub.vercel.app/books?title=Refactoring"
       },
       {
         "id": 8,
         "title": "The Art of Computer Programming",
         "description": "Dive deep into algorithms and computational theory.",
         "image": "https://m.media-amazon.com/images/I/61ndJx-40NL._SY466_.jpg",
-        "link": "http://localhost:3000/books?title=The+Art+of+the+computer+programming"
+        "link": "https://book-note-hub.vercel.app/books?title=The+Art+of+the+computer+programming"
       }
     ]
   
