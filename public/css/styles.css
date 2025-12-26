@@ -1707,7 +1707,7 @@ textarea {
     transform: translateY(-50%);
     background-color: transparent;
     border: none;
-    color: var(--primary-color);
+
     font-size: 0.9rem;
     cursor: pointer;
     font-weight: 600;
