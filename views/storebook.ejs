@@ -1,11 +1,574 @@
 <%- include('header', { title: 'My Books' }) %>
 <link rel="stylesheet" href="/css/styles.css">
+<style>
+    :root {
+        --primary-color: #6366f1;
+        --secondary-color: #8b5cf6;
+        --accent-color: #ec4899;
+        --text-dark: #1e293b;
+        --text-medium: #64748b;
+        --text-light: #94a3b8;
+        --bg-light: #f8fafc;
+        --success-color: #10b981;
+        --danger-color: #ef4444;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 50%, #fce7f3 100%);
+        min-height: 100vh;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* Container Styles */
+    .container {
+        max-width: 1300px;
+        margin: 120px auto 60px;
+        padding: 0 2rem;
+        min-height: calc(100vh - 200px);
+    }
+
+    /* Header Section */
+    .page-header {
+        margin-bottom: 3rem;
+        animation: fadeInDown 0.6s ease-out;
+    }
+
+    .container > h1 {
+        font-size: 3rem;
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin: 0 0 1.5rem 0;
+        font-weight: 900;
+        letter-spacing: -0.5px;
+        display: inline-block;
+    }
+
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .container > p {
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.8rem;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: white;
+        padding: 12px 28px;
+        border-radius: 50px;
+        font-weight: 700;
+        box-shadow: 0 6px 20px rgba(99, 102, 241, 0.35);
+        animation: fadeInDown 0.7s ease-out;
+    }
+
+    .container > p::before {
+        content: '📚';
+        font-size: 1.4rem;
+    }
+
+    /* Message Styles */
+    .message {
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+        padding: 1.2rem 2rem;
+        border-radius: 16px;
+        margin-bottom: 2rem;
+        font-weight: 600;
+        font-size: 1.05rem;
+        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+        animation: fadeInUp 0.6s ease-out;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Books Grid */
+    .books-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2.5rem;
+        margin-top: 2rem;
+        animation: fadeInUp 0.8s ease-out;
+    }
+
+    /* Book Card Styles */
+    .book-card {
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        border: 1px solid rgba(99, 102, 241, 0.1);
+    }
+
+    .book-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899);
+        z-index: 1;
+    }
+
+    .book-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 20px 50px rgba(99, 102, 241, 0.3);
+    }
+
+    /* Book Cover */
+    .book-cover {
+        width: 100%;
+        height: 400px;
+        object-fit: cover;
+        transition: transform 0.4s ease;
+        display: block;
+        background: linear-gradient(135deg, #e0e7ff, #f3e8ff);
+    }
+
+    .book-card:hover .book-cover {
+        transform: scale(1.08);
+    }
+
+    /* Book Content */
+    .book-card h3 {
+        font-size: 1.5rem;
+        color: #1e293b;
+        margin: 1.8rem 1.8rem 1rem;
+        font-weight: 800;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        min-height: 4.2rem;
+    }
+
+    .book-card p {
+        color: #64748b;
+        margin: 0 1.8rem 1rem;
+        line-height: 1.7;
+        font-size: 1rem;
+    }
+
+    .book-card p:last-of-type {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        flex-grow: 1;
+        min-height: 5.1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .book-card p strong {
+        color: #1e293b;
+        font-weight: 700;
+    }
+
+    /* View PDF Button */
+    .view-pdf-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: white;
+        padding: 14px 28px;
+        border: none;
+        border-radius: 50px;
+        font-size: 1rem;
+        font-weight: 700;
+        text-decoration: none;
+        margin: 0 1.8rem 1rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 6px 20px rgba(99, 102, 241, 0.35);
+        min-height: 50px;
+    }
+
+    .view-pdf-btn::before {
+        content: '📄';
+        font-size: 1.3rem;
+    }
+
+    .view-pdf-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(99, 102, 241, 0.5);
+        background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    }
+
+    /* Remove Button Form */
+    .book-card form {
+        margin: 0 1.8rem 1.8rem;
+    }
+
+    .remove-btn {
+        width: 100%;
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        color: white;
+        padding: 14px 28px;
+        border: none;
+        border-radius: 50px;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 6px 20px rgba(239, 68, 68, 0.35);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        min-height: 50px;
+    }
+
+    .remove-btn::before {
+        content: '🗑️';
+        font-size: 1.2rem;
+    }
+
+    .remove-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(239, 68, 68, 0.5);
+        background: linear-gradient(135deg, #dc2626, #b91c1c);
+    }
+
+    .remove-btn:active {
+        transform: translateY(-1px);
+    }
+
+    /* Empty State */
+    .books-grid > p {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 100px 50px;
+        background: white;
+        border-radius: 24px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        font-size: 1.3rem;
+        color: #64748b;
+        animation: fadeInUp 0.8s ease-out;
+        border: 2px solid rgba(99, 102, 241, 0.1);
+    }
+
+    .books-grid > p::before {
+        content: '📚';
+        display: block;
+        font-size: 6rem;
+        margin-bottom: 2rem;
+        animation: bounce 2s infinite;
+        filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.1));
+    }
+
+    @keyframes bounce {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-25px);
+        }
+    }
+
+    .books-grid > p a {
+        color: white;
+        font-weight: 700;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 1.5rem;
+        padding: 16px 36px;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        border-radius: 50px;
+        transition: all 0.3s ease;
+        box-shadow: 0 6px 20px rgba(99, 102, 241, 0.35);
+        font-size: 1.1rem;
+    }
+
+    .books-grid > p a::after {
+        content: '→';
+        font-size: 1.4rem;
+        transition: transform 0.3s ease;
+    }
+
+    .books-grid > p a:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 35px rgba(99, 102, 241, 0.5);
+        background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    }
+
+    .books-grid > p a:hover::after {
+        transform: translateX(8px);
+    }
+
+    /* Back to Top Button */
+    .back-to-top {
+        position: fixed;
+        bottom: 40px;
+        right: 40px;
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        font-size: 1.4rem;
+        cursor: pointer;
+        box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 3px solid white;
+    }
+
+    .back-to-top.visible {
+        opacity: 1;
+        visibility: visible;
+        animation: slideInUp 0.4s ease-out;
+    }
+
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .back-to-top:hover {
+        transform: translateY(-8px) scale(1.1);
+        box-shadow: 0 15px 40px rgba(99, 102, 241, 0.6);
+    }
+
+    .back-to-top i {
+        transition: transform 0.3s ease;
+    }
+
+    .back-to-top:hover i {
+        transform: translateY(-4px);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+        .books-grid {
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .book-cover {
+            height: 360px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            padding: 0 1.5rem;
+            margin-top: 100px;
+        }
+
+        .container > h1 {
+            font-size: 2.2rem;
+        }
+
+        .container > p {
+            font-size: 1rem;
+            padding: 10px 22px;
+        }
+
+        .books-grid {
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 2rem;
+        }
+
+        .book-cover {
+            height: 340px;
+        }
+
+        .book-card h3 {
+            font-size: 1.3rem;
+            margin: 1.5rem 1.5rem 0.8rem;
+        }
+
+        .book-card p {
+            margin: 0 1.5rem 0.8rem;
+            font-size: 0.95rem;
+        }
+
+        .view-pdf-btn {
+            margin: 0 1.5rem 0.8rem;
+            padding: 12px 24px;
+            font-size: 0.95rem;
+        }
+
+        .book-card form {
+            margin: 0 1.5rem 1.5rem;
+        }
+
+        .remove-btn {
+            padding: 12px 24px;
+            font-size: 0.95rem;
+        }
+
+        .back-to-top {
+            bottom: 25px;
+            right: 25px;
+            width: 55px;
+            height: 55px;
+            font-size: 1.2rem;
+        }
+
+        .books-grid > p {
+            padding: 80px 35px;
+            font-size: 1.15rem;
+        }
+
+        .books-grid > p::before {
+            font-size: 5rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .container {
+            padding: 0 1rem;
+            margin-top: 90px;
+        }
+
+        .container > h1 {
+            font-size: 1.9rem;
+        }
+
+        .container > p {
+            font-size: 0.95rem;
+            padding: 8px 18px;
+        }
+
+        .books-grid {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        .book-cover {
+            height: 320px;
+        }
+
+        .book-card h3 {
+            font-size: 1.2rem;
+            margin: 1.3rem 1.3rem 0.7rem;
+        }
+
+        .book-card p {
+            margin: 0 1.3rem 0.7rem;
+            font-size: 0.9rem;
+        }
+
+        .view-pdf-btn,
+        .remove-btn {
+            padding: 11px 22px;
+            font-size: 0.9rem;
+        }
+
+        .view-pdf-btn {
+            margin: 0 1.3rem 0.8rem;
+        }
+
+        .book-card form {
+            margin: 0 1.3rem 1.3rem;
+        }
+
+        .message {
+            padding: 1rem 1.3rem;
+            font-size: 0.95rem;
+        }
+
+        .books-grid > p {
+            padding: 60px 25px;
+            font-size: 1.05rem;
+        }
+
+        .books-grid > p::before {
+            font-size: 4.5rem;
+        }
+
+        .books-grid > p a {
+            padding: 13px 28px;
+            font-size: 1rem;
+        }
+
+        .back-to-top {
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            font-size: 1.1rem;
+        }
+    }
+
+    /* Print Styles */
+    @media print {
+        .back-to-top,
+        .remove-btn,
+        .view-pdf-btn {
+            display: none;
+        }
+
+        .book-card {
+            break-inside: avoid;
+            box-shadow: none;
+            border: 1px solid #e5e7eb;
+        }
+
+        body {
+            background: white;
+        }
+    }
+</style>
+
 <div class="container">
-    <h1>My Published Books</h1>
-    <p>Total Books: <%= totalBooks %></p>
+    <div class="page-header">
+        <h1><i class="fas fa-book"></i> My Published Books</h1>
+        <p class="book-count-badge">Total Books: <%= totalBooks %></p>
+    </div>
 
     <% if (message) { %>
-        <div class="message"><%= message %></div>
+        <div class="message">
+            ✓ <%= message %>
+        </div>
     <% } %>
 
     <section class="books-grid">
@@ -16,7 +579,9 @@
                         src="<%= book.coverImage %>" 
                         alt="<%= book.title %>" 
                         class="book-cover"
-                        onerror="this.src='/default-cover.jpg'">
+                        onerror="this.src='https://via.placeholder.com/400x600/6366f1/ffffff?text=No+Cover'"
+                        loading="lazy">
+                    
                     <h3><%= book.title %></h3>
                     <p><strong>Author:</strong> <%= book.author %></p>
                     <p><%= book.description %></p>
@@ -27,16 +592,79 @@
                         </a>
                     <% } %>
                     
-                    <form action="/storebook/remove" method="POST">
+                    <form action="/storebook/remove" method="POST" onsubmit="return confirm('⚠️ Are you sure you want to remove this book? This action cannot be undone.');">
                         <input type="hidden" name="title" value="<%= book.title %>">
-                        <button type="submit" class="remove-btn">Remove</button>
+                        <button type="submit" class="remove-btn">Remove Book</button>
                     </form>
                 </div>
             <% }) %>
         <% } else { %>
-            <p>No books published yet. <a href="/publish">Publish your first book!</a></p>
+            <p>
+                No books published yet. 
+                <a href="/publish">Publish your first book!</a>
+            </p>
         <% } %>
     </section>
 </div>
+
+<!-- Back to Top Button -->
+<button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <i class="fas fa-arrow-up"></i>
+</button>
+
+<script>
+    // Back to Top Button
+    const backToTopBtn = document.getElementById('backToTop');
+    
+    window.addEventListener('scroll', function() {
+        if (window.pageYOffset > 400) {
+            backToTopBtn.classList.add('visible');
+        } else {
+            backToTopBtn.classList.remove('visible');
+        }
+    });
+    
+    backToTopBtn.addEventListener('click', function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
+    // Add stagger animation to book cards
+    const bookCards = document.querySelectorAll('.book-card');
+    bookCards.forEach((card, index) => {
+        card.style.animation = `fadeInUp 0.6s ease-out ${index * 0.1}s both`;
+    });
+
+    // Lazy loading for images with better error handling
+    if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    if (img.dataset.src) {
+                        img.src = img.dataset.src;
+                    }
+                    img.classList.add('loaded');
+                    observer.unobserve(img);
+                }
+            });
+        }, {
+            rootMargin: '50px'
+        });
+
+        document.querySelectorAll('.book-cover').forEach(img => {
+            imageObserver.observe(img);
+        });
+    }
+
+    // Add smooth hover effect
+    bookCards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+        });
+    });
+</script>
 
 <%- include('footer') %>

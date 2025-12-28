@@ -4,8 +4,486 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Publish a New Book</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-      
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #ec4899;
+            --success-color: #10b981;
+            --danger-color: #ef4444;
+            --text-dark: #1e293b;
+            --text-medium: #64748b;
+            --text-light: #94a3b8;
+            --bg-light: #f8fafc;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 50%, #fce7f3 100%);
+            min-height: 100vh;
+            padding-bottom: 3rem;
+        }
+
+        /* Container */
+        .container {
+            max-width: 800px;
+            margin: 120px auto 60px;
+            padding: 0 2rem;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Page Title */
+        .container > h1 {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            font-weight: 900;
+            text-align: center;
+            letter-spacing: -0.5px;
+        }
+
+        /* Messages */
+        .message {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            padding: 1.2rem 2rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            font-weight: 600;
+            font-size: 1.05rem;
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .message::before {
+            content: 'ℹ️';
+            font-size: 1.5rem;
+        }
+
+        .success {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 1.2rem 2rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            font-weight: 600;
+            font-size: 1.05rem;
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            animation: slideInDown 0.5s ease-out;
+        }
+
+        .success::before {
+            content: '✓';
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Form Styling */
+        form {
+            background: white;
+            padding: 3rem;
+            
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            border: 2px solid rgba(99, 102, 241, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        form::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899);
+        }
+
+        /* Form Groups */
+        form > div {
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.6s ease-out backwards;
+        }
+
+        form > div:nth-child(1) { animation-delay: 0.1s; }
+        form > div:nth-child(2) { animation-delay: 0.2s; }
+        form > div:nth-child(3) { animation-delay: 0.3s; }
+        form > div:nth-child(4) { animation-delay: 0.4s; }
+        form > div:nth-child(5) { animation-delay: 0.5s; }
+        form > div:nth-child(6) { animation-delay: 0.6s; }
+
+        /* Labels */
+        label {
+            display: block;
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: var(--text-dark);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        label::before {
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+
+        label[for="title"]::before { content: '\f02d'; }
+        label[for="author"]::before { content: '\f007'; }
+        label[for="description"]::before { content: '\f036'; }
+        label[for="coverImage"]::before { content: '\f03e'; }
+        label[for="publicationDate"]::before { content: '\f017'; }
+        label[for="pdfFile"]::before { content: '\f1c1'; }
+
+        /* Input Fields */
+        input[type="text"],
+        input[type="datetime-local"],
+        textarea {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            background: var(--bg-light);
+            color: var(--text-dark);
+        }
+
+        input[type="text"]:focus,
+        input[type="datetime-local"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+            background: white;
+        }
+
+        input[type="text"]:hover,
+        input[type="datetime-local"]:hover,
+        textarea:hover {
+            border-color: var(--primary-color);
+        }
+
+        /* Textarea */
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+            line-height: 1.6;
+        }
+
+        /* File Input Styling */
+        input[type="file"] {
+            width: 100%;
+            padding: 1.5rem;
+            border: 3px dashed var(--border-color);
+            border-radius: 12px;
+            background: var(--bg-light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            color: var(--text-medium);
+        }
+
+        input[type="file"]:hover {
+            border-color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        input[type="file"]::file-selector-button {
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        input[type="file"]::file-selector-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Submit Button */
+        button[type="submit"] {
+            width: 100%;
+            padding: 1.2rem 2rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.35);
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            animation: fadeInUp 0.6s ease-out 0.7s backwards;
+        }
+
+        button[type="submit"]::before {
+            content: '📚';
+            font-size: 1.5rem;
+        }
+
+        button[type="submit"]:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.5);
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+        }
+
+        button[type="submit"]:active {
+            transform: translateY(-2px);
+        }
+
+        /* Required Indicator */
+        input:required + label::after,
+        textarea:required + label::after {
+            content: '*';
+            color: var(--danger-color);
+            margin-left: 0.3rem;
+            font-size: 1.2rem;
+        }
+
+        /* Validation States */
+        input:invalid:not(:placeholder-shown),
+        textarea:invalid:not(:placeholder-shown) {
+            border-color: var(--danger-color);
+        }
+
+        input:valid:not(:placeholder-shown),
+        textarea:valid:not(:placeholder-shown) {
+            border-color: var(--success-color);
+        }
+
+        /* Helper Text */
+        .helper-text {
+            font-size: 0.9rem;
+            color: var(--text-medium);
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .helper-text::before {
+            content: '💡';
+            font-size: 1rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                margin: 100px auto 40px;
+                padding: 0 1.5rem;
+            }
+
+            .container > h1 {
+                font-size: 2.2rem;
+            }
+
+            form {
+                padding: 2rem 1.5rem;
+            }
+
+            input[type="text"],
+            input[type="datetime-local"],
+            textarea {
+                padding: 0.9rem 1.2rem;
+                font-size: 0.95rem;
+            }
+
+            textarea {
+                min-height: 130px;
+            }
+
+            input[type="file"] {
+                padding: 1.2rem;
+                font-size: 0.9rem;
+            }
+
+            input[type="file"]::file-selector-button {
+                padding: 0.7rem 1.2rem;
+                font-size: 0.9rem;
+                margin-right: 0.8rem;
+            }
+
+            button[type="submit"] {
+                padding: 1rem 1.8rem;
+                font-size: 1.1rem;
+            }
+
+            label {
+                font-size: 1rem;
+            }
+
+            .message,
+            .success {
+                padding: 1rem 1.5rem;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 1rem;
+                margin: 90px auto 30px;
+            }
+
+            .container > h1 {
+                font-size: 1.9rem;
+            }
+
+            form {
+                padding: 1.8rem 1.2rem;
+            }
+
+            form > div {
+                margin-bottom: 1.5rem;
+            }
+
+            input[type="text"],
+            input[type="datetime-local"],
+            textarea {
+                padding: 0.8rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            textarea {
+                min-height: 120px;
+            }
+
+            input[type="file"] {
+                padding: 1rem;
+                font-size: 0.85rem;
+            }
+
+            input[type="file"]::file-selector-button {
+                padding: 0.6rem 1rem;
+                font-size: 0.85rem;
+                margin-right: 0.6rem;
+                display: block;
+                width: 100%;
+                margin-bottom: 0.8rem;
+            }
+
+            button[type="submit"] {
+                padding: 0.9rem 1.5rem;
+                font-size: 1rem;
+            }
+
+            label {
+                font-size: 0.95rem;
+            }
+
+            label::before {
+                font-size: 1.1rem;
+            }
+
+            .message,
+            .success {
+                padding: 0.9rem 1.2rem;
+                font-size: 0.95rem;
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .message::before,
+            .success::before {
+                font-size: 2rem;
+            }
+        }
+
+        /* Loading State */
+        button[type="submit"]:disabled {
+            background: linear-gradient(135deg, #94a3b8, #64748b);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        button[type="submit"]:disabled::before {
+            content: '⏳';
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Focus Visible for Accessibility */
+        *:focus-visible {
+            outline: 3px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+            }
+
+            form {
+                box-shadow: none;
+                border: 1px solid #e5e7eb;
+            }
+
+            button[type="submit"] {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body>
@@ -13,7 +491,7 @@
     <%- include('header', { title: 'Publish New Book', user: user }) %>
 
     <div class="container">
-        <h1>Publish a New Book</h1>
+        <h1><i class="fas fa-book-open"></i>  Publish a New Book</h1>
 
         <!-- Display any message passed from the server -->
         <% if (message) { %>
@@ -26,34 +504,81 @@
         <% } %>
 
         <!-- Book publishing form -->
-        <form action="/publish" method="POST" enctype="multipart/form-data">
+        <form action="/publish" method="POST" enctype="multipart/form-data" id="publishForm">
             <div>
                 <label for="title">Book Title:</label>
-                <input type="text" id="title" name="title" required>
+                <input type="text" id="title" name="title" placeholder="Enter the book title..." required>
             </div>
+
             <div>
                 <label for="author">Author:</label>
-                <input type="text" id="author" name="author" required>
+                <input type="text" id="author" name="author" placeholder="Enter author name..." required>
             </div>
+
             <div>
                 <label for="description">Description:</label>
-                <textarea id="description" name="description" required></textarea>
+                <textarea id="description" name="description" placeholder="Write a compelling description of the book..." required></textarea>
+                <p class="helper-text">Provide a brief overview of what readers can expect from this book.</p>
             </div>
+
             <div>
                 <label for="coverImage">Cover Image:</label>
                 <input type="file" id="coverImage" name="coverImage" accept="image/*" required>
+                <p class="helper-text">Upload an eye-catching cover image (JPG, PNG, or WEBP)</p>
             </div>
+
             <div>
                 <label for="publicationDate">Publication Date and Time:</label>
                 <input type="datetime-local" id="publicationDate" name="publicationDate" required>
+                <p class="helper-text">Choose when you want this book to be published.</p>
             </div>
+
             <div>
                 <label for="pdfFile">Upload PDF:</label>
                 <input type="file" id="pdfFile" name="pdfFile" accept="application/pdf" required>
+                <p class="helper-text">Upload the complete book in PDF format.</p>
             </div>
-            <button type="submit">Publish Book</button>
+
+            <button type="submit" id="submitBtn">Publish Book</button>
         </form>
     </div>
+
+    <script>
+        // Form submission handling
+        const form = document.getElementById('publishForm');
+        const submitBtn = document.getElementById('submitBtn');
+
+        form.addEventListener('submit', function(e) {
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Publishing...';
+        });
+
+        // Auto-dismiss success message
+        const successMsg = document.querySelector('.success');
+        if (successMsg) {
+            setTimeout(() => {
+                successMsg.style.transition = 'opacity 0.5s ease';
+                successMsg.style.opacity = '0';
+                setTimeout(() => successMsg.remove(), 500);
+            }, 5000);
+        }
+
+        // File input preview names
+        const fileInputs = document.querySelectorAll('input[type="file"]');
+        fileInputs.forEach(input => {
+            input.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    console.log(`Selected: ${this.files[0].name}`);
+                }
+            });
+        });
+
+        // Set minimum date to today
+        const dateInput = document.getElementById('publicationDate');
+        const now = new Date();
+        now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+        dateInput.min = now.toISOString().slice(0, 16);
+    </script>
 
     <!-- Include footer -->
     <%- include('footer') %>

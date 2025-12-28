@@ -68,9 +68,7 @@ body {
     overflow-x: hidden;
 }
 
-body.sidebar-open {
-   
-}
+
 
 /* ========================================
    HEADER & NAVIGATION
@@ -155,7 +153,7 @@ nav {
 .logo i {
     font-size: 1.4rem;
     background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-    -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
@@ -599,7 +597,7 @@ main {
     max-width: 1200px;
     margin: 20px auto;
     padding: 80px;
-    background: white;
+
     border-radius: 24px;
     box-shadow: var(--shadow-xl);
     animation: fadeInUp 0.6s ease-out;
@@ -668,7 +666,7 @@ h2 {
 
 .welcome-section h1, .welcome-section h2 {
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
-    -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     font-size: 2.8em;
     margin-bottom: 1rem;
@@ -859,7 +857,7 @@ h2 {
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -line-clamp: 2;
     -webkit-box-orient: vertical;
 }
 
@@ -873,7 +871,7 @@ h2 {
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
+    -line-clamp: 3;
     -webkit-box-orient: vertical;
 }
 
@@ -1168,7 +1166,7 @@ h2 {
 
 .offers h2 {
     background: linear-gradient(135deg, var(--warning-color) 0%, var(--accent-color) 100%);
-    -webkit-background-clip: text;
+    -background-clip: text;
     -webkit-text-fill-color: transparent;
     font-size: 2.8em;
     margin-bottom: 2rem;
@@ -1647,7 +1645,7 @@ form {
     display: flex;
     flex-direction: column;
     gap: 24px;
-    max-width: 500px;
+   
     margin: auto;
 }
 
@@ -2332,7 +2330,7 @@ button[type="submit"]:active {
         .footer-brand i {
             font-size: 1.8rem;
             background: linear-gradient(135deg, #6366f1, #ec4899);
-            -webkit-background-clip: text;
+            -background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: rotate 3s linear infinite;
         }
@@ -2571,7 +2569,7 @@ button[type="submit"]:active {
         .footer-year {
             font-weight: 700;
             background: linear-gradient(135deg, #6366f1, #ec4899);
-            -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
