@@ -1166,7 +1166,7 @@ h2 {
 
 .offers h2 {
     background: linear-gradient(135deg, var(--warning-color) 0%, var(--accent-color) 100%);
-    -background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     font-size: 2.8em;
     margin-bottom: 2rem;

@@ -32,7 +32,6 @@
             padding-bottom: 3rem;
         }
 
-        /* Container */
         .container {
             max-width: 800px;
             margin: 120px auto 60px;
@@ -51,7 +50,6 @@
             }
         }
 
-        /* Page Title */
         .container > h1 {
             font-size: 3rem;
             background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
@@ -64,7 +62,6 @@
             letter-spacing: -0.5px;
         }
 
-        /* Messages */
         .message {
             background: linear-gradient(135deg, #3b82f6, #2563eb);
             color: white;
@@ -118,11 +115,9 @@
             }
         }
 
-        /* Form Styling */
         form {
             background: white;
             padding: 3rem;
-            
             border-radius: 24px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
             border: 2px solid rgba(99, 102, 241, 0.1);
@@ -140,7 +135,6 @@
             background: linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899);
         }
 
-        /* Form Groups */
         form > div {
             margin-bottom: 2rem;
             animation: fadeInUp 0.6s ease-out backwards;
@@ -152,8 +146,8 @@
         form > div:nth-child(4) { animation-delay: 0.4s; }
         form > div:nth-child(5) { animation-delay: 0.5s; }
         form > div:nth-child(6) { animation-delay: 0.6s; }
+        form > div:nth-child(7) { animation-delay: 0.7s; }
 
-        /* Labels */
         label {
             display: block;
             font-weight: 700;
@@ -179,7 +173,6 @@
         label[for="publicationDate"]::before { content: '\f017'; }
         label[for="pdfFile"]::before { content: '\f1c1'; }
 
-        /* Input Fields */
         input[type="text"],
         input[type="datetime-local"],
         textarea {
@@ -203,20 +196,12 @@
             background: white;
         }
 
-        input[type="text"]:hover,
-        input[type="datetime-local"]:hover,
-        textarea:hover {
-            border-color: var(--primary-color);
-        }
-
-        /* Textarea */
         textarea {
             min-height: 150px;
             resize: vertical;
             line-height: 1.6;
         }
 
-        /* File Input Styling */
         input[type="file"] {
             width: 100%;
             padding: 1.5rem;
@@ -252,7 +237,114 @@
             box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
         }
 
-        /* Submit Button */
+        /* Toggle Switch for Public/Private */
+        .visibility-toggle {
+            background: var(--bg-light);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+        }
+
+        .toggle-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .toggle-label {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: var(--text-dark);
+        }
+
+        .toggle-label i {
+            font-size: 1.3rem;
+            color: var(--primary-color);
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #cbd5e1;
+            border-radius: 30px;
+            transition: 0.4s;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            border-radius: 50%;
+            transition: 0.4s;
+        }
+
+        input:checked + .toggle-slider {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(30px);
+        }
+
+        .toggle-description {
+            font-size: 0.95rem;
+            color: var(--text-medium);
+            line-height: 1.6;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .toggle-description i {
+            margin-top: 0.2rem;
+            color: var(--primary-color);
+        }
+
+        .visibility-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-top: 0.8rem;
+        }
+
+        .visibility-status.public {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .visibility-status.private {
+            background: rgba(100, 116, 139, 0.1);
+            color: var(--text-medium);
+        }
+
         button[type="submit"] {
             width: 100%;
             padding: 1.2rem 2rem;
@@ -270,7 +362,7 @@
             align-items: center;
             justify-content: center;
             gap: 1rem;
-            animation: fadeInUp 0.6s ease-out 0.7s backwards;
+            animation: fadeInUp 0.6s ease-out 0.8s backwards;
         }
 
         button[type="submit"]::before {
@@ -288,27 +380,22 @@
             transform: translateY(-2px);
         }
 
-        /* Required Indicator */
-        input:required + label::after,
-        textarea:required + label::after {
-            content: '*';
-            color: var(--danger-color);
-            margin-left: 0.3rem;
-            font-size: 1.2rem;
+        button[type="submit"]:disabled {
+            background: linear-gradient(135deg, #94a3b8, #64748b);
+            cursor: not-allowed;
+            transform: none;
         }
 
-        /* Validation States */
-        input:invalid:not(:placeholder-shown),
-        textarea:invalid:not(:placeholder-shown) {
-            border-color: var(--danger-color);
+        button[type="submit"]:disabled::before {
+            content: '⏳';
+            animation: spin 1s linear infinite;
         }
 
-        input:valid:not(:placeholder-shown),
-        textarea:valid:not(:placeholder-shown) {
-            border-color: var(--success-color);
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
-        /* Helper Text */
         .helper-text {
             font-size: 0.9rem;
             color: var(--text-medium);
@@ -338,41 +425,10 @@
                 padding: 2rem 1.5rem;
             }
 
-            input[type="text"],
-            input[type="datetime-local"],
-            textarea {
-                padding: 0.9rem 1.2rem;
-                font-size: 0.95rem;
-            }
-
-            textarea {
-                min-height: 130px;
-            }
-
-            input[type="file"] {
-                padding: 1.2rem;
-                font-size: 0.9rem;
-            }
-
-            input[type="file"]::file-selector-button {
-                padding: 0.7rem 1.2rem;
-                font-size: 0.9rem;
-                margin-right: 0.8rem;
-            }
-
-            button[type="submit"] {
-                padding: 1rem 1.8rem;
-                font-size: 1.1rem;
-            }
-
-            label {
-                font-size: 1rem;
-            }
-
-            .message,
-            .success {
-                padding: 1rem 1.5rem;
-                font-size: 1rem;
+            .toggle-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
             }
         }
 
@@ -390,120 +446,29 @@
                 padding: 1.8rem 1.2rem;
             }
 
-            form > div {
-                margin-bottom: 1.5rem;
-            }
-
-            input[type="text"],
-            input[type="datetime-local"],
-            textarea {
-                padding: 0.8rem 1rem;
-                font-size: 0.9rem;
-            }
-
-            textarea {
-                min-height: 120px;
-            }
-
-            input[type="file"] {
-                padding: 1rem;
-                font-size: 0.85rem;
-            }
-
             input[type="file"]::file-selector-button {
-                padding: 0.6rem 1rem;
-                font-size: 0.85rem;
-                margin-right: 0.6rem;
                 display: block;
                 width: 100%;
                 margin-bottom: 0.8rem;
-            }
-
-            button[type="submit"] {
-                padding: 0.9rem 1.5rem;
-                font-size: 1rem;
-            }
-
-            label {
-                font-size: 0.95rem;
-            }
-
-            label::before {
-                font-size: 1.1rem;
-            }
-
-            .message,
-            .success {
-                padding: 0.9rem 1.2rem;
-                font-size: 0.95rem;
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .message::before,
-            .success::before {
-                font-size: 2rem;
-            }
-        }
-
-        /* Loading State */
-        button[type="submit"]:disabled {
-            background: linear-gradient(135deg, #94a3b8, #64748b);
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        button[type="submit"]:disabled::before {
-            content: '⏳';
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        /* Focus Visible for Accessibility */
-        *:focus-visible {
-            outline: 3px solid var(--primary-color);
-            outline-offset: 2px;
-        }
-
-        /* Print Styles */
-        @media print {
-            body {
-                background: white;
-            }
-
-            form {
-                box-shadow: none;
-                border: 1px solid #e5e7eb;
-            }
-
-            button[type="submit"] {
-                display: none;
+                margin-right: 0;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Include header -->
     <%- include('header', { title: 'Publish New Book', user: user }) %>
 
     <div class="container">
-        <h1><i class="fas fa-book-open"></i>  Publish a New Book</h1>
+        <h1><i class="fas fa-book-open"></i> Publish a New Book</h1>
 
-        <!-- Display any message passed from the server -->
         <% if (message) { %>
             <p class="message"><%= message %></p>
         <% } %>
 
-        <!-- Display success message if book is published -->
         <% if (success) { %>
             <p class="success">Book published successfully!</p>
         <% } %>
 
-        <!-- Book publishing form -->
         <form action="/publish" method="POST" enctype="multipart/form-data" id="publishForm">
             <div>
                 <label for="title">Book Title:</label>
@@ -539,11 +504,54 @@
                 <p class="helper-text">Upload the complete book in PDF format.</p>
             </div>
 
+            <!-- Public/Private Toggle -->
+            <div>
+                <div class="visibility-toggle">
+                    <div class="toggle-header">
+                        <div class="toggle-label">
+                            <i class="fas fa-eye"></i>
+                            <span>Book Visibility</span>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="isPublic" name="isPublic" checked onchange="updateVisibilityStatus()">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="toggle-description">
+                        <i class="fas fa-info-circle"></i>
+                        <span id="visibilityDescription">
+                            Make your book visible to the entire BookNote Hub community. Other users can discover, like, comment, and save your book to their reading list.
+                        </span>
+                    </div>
+                    <div class="visibility-status public" id="visibilityStatus">
+                        <i class="fas fa-globe"></i>
+                        <span>Public - Visible to everyone</span>
+                    </div>
+                </div>
+            </div>
+
             <button type="submit" id="submitBtn">Publish Book</button>
         </form>
     </div>
 
     <script>
+        // Update visibility status
+        function updateVisibilityStatus() {
+            const toggle = document.getElementById('isPublic');
+            const status = document.getElementById('visibilityStatus');
+            const description = document.getElementById('visibilityDescription');
+            
+            if (toggle.checked) {
+                status.className = 'visibility-status public';
+                status.innerHTML = '<i class="fas fa-globe"></i><span>Public - Visible to everyone</span>';
+                description.textContent = 'Make your book visible to the entire BookNote Hub community. Other users can discover, like, comment, and save your book to their reading list.';
+            } else {
+                status.className = 'visibility-status private';
+                status.innerHTML = '<i class="fas fa-lock"></i><span>Private - Only you can see</span>';
+                description.textContent = 'Keep your book private. Only you will be able to see and access this book in your personal library.';
+            }
+        }
+
         // Form submission handling
         const form = document.getElementById('publishForm');
         const submitBtn = document.getElementById('submitBtn');
@@ -563,7 +571,13 @@
             }, 5000);
         }
 
-        // File input preview names
+        // Set minimum date to today
+        const dateInput = document.getElementById('publicationDate');
+        const now = new Date();
+        now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+        dateInput.min = now.toISOString().slice(0, 16);
+
+        // File input preview
         const fileInputs = document.querySelectorAll('input[type="file"]');
         fileInputs.forEach(input => {
             input.addEventListener('change', function() {
@@ -572,15 +586,80 @@
                 }
             });
         });
-
-        // Set minimum date to today
-        const dateInput = document.getElementById('publicationDate');
-        const now = new Date();
-        now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-        dateInput.min = now.toISOString().slice(0, 16);
     </script>
 
-    <!-- Include footer -->
     <%- include('footer') %>
 </body>
 </html>
+
+<!-- 
+DATABASE SCHEMA ADDITION:
+Add to your books collection/table:
+
+{
+  title: String,
+  author: String,
+  description: String,
+  coverImage: String,
+  pdfLink: String,
+  publicationDate: Date,
+  isPublic: Boolean (default: false),
+  publisher: ObjectId (reference to User),
+  publisherUsername: String,
+  publisherAvatar: String,
+  likes: [{
+    userId: ObjectId,
+    username: String,
+    timestamp: Date
+  }],
+  comments: [{
+    userId: ObjectId,
+    username: String,
+    userAvatar: String,
+    text: String,
+    timestamp: Date
+  }],
+  saves: [{
+    userId: ObjectId,
+    timestamp: Date
+  }],
+  views: Number (default: 0),
+  createdAt: Date,
+  updatedAt: Date
+}
+
+BACKEND ROUTES NEEDED:
+
+// Publish book
+POST /publish
+- Process form data
+- Save isPublic field from checkbox
+- Store publisher info (userId, username, avatar)
+
+// Get public books for home feed
+GET /api/books/public
+- Find all books where isPublic = true
+- Sort by publicationDate descending
+- Populate publisher info
+
+// Like a book
+POST /api/books/:bookId/like
+- Add/remove userId from likes array
+- Return updated like count
+
+// Comment on book
+POST /api/books/:bookId/comment
+- Add comment with userId, username, avatar, text, timestamp
+- Return updated comments
+
+// Save to reading list
+POST /api/books/:bookId/save
+- Add book to user's reading list
+- Add userId to book's saves array
+
+// Get user's own books (storebook)
+GET /storebook
+- Find books where publisher = currentUserId
+- Show both public and private
+
+-->

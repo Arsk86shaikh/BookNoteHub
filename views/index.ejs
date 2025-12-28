@@ -4,7 +4,562 @@
 />
 <%- include('header', { title: 'BookNote Hub' }) %>
 <style>
-  
+   :root {
+        --primary-color: #6366f1;
+        --secondary-color: #8b5cf6;
+        --accent-color: #ec4899;
+        --text-dark: #1e293b;
+        --text-medium: #64748b;
+        --text-light: #94a3b8;
+        --bg-light: #f8fafc;
+        --success-color: #10b981;
+        --danger-color: #ef4444;
+        --like-color: #ef4444;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 50%, #fce7f3 100%);
+        min-height: 100vh;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* Page Header */
+    .page-header {
+        max-width: 900px;
+        margin: 120px auto 3rem;
+        padding: 0 1.5rem;
+        text-align: center;
+        animation: fadeInDown 0.6s ease-out;
+    }
+
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .page-header h1 {
+        font-size: 3rem;
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 1rem;
+        font-weight: 900;
+        letter-spacing: -0.5px;
+    }
+
+    .page-header p {
+        font-size: 1.2rem;
+        color: var(--text-medium);
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    /* Feed Container */
+    .feed-container {
+        max-width: 900px;
+        margin: 0 auto 4rem;
+        padding: 0 1.5rem;
+    }
+
+    /* Book Post Card */
+    .book-post {
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        margin-bottom: 3rem;
+        border: 1px solid rgba(99, 102, 241, 0.1);
+        animation: fadeInUp 0.6s ease-out;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Post Header - User Info */
+    .post-header {
+        display: flex;
+        align-items: center;
+        padding: 1.5rem;
+        gap: 1rem;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .user-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        border: 3px solid var(--primary-color);
+        object-fit: cover;
+    }
+
+    .user-info {
+        flex: 1;
+    }
+
+    .user-info .username {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        text-decoration: none;
+        display: block;
+        margin-bottom: 0.2rem;
+        transition: color 0.3s ease;
+    }
+
+    .user-info .username:hover {
+        color: var(--primary-color);
+    }
+
+    .publish-date {
+        font-size: 0.9rem;
+        color: var(--text-medium);
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    .publish-date i {
+        font-size: 0.85rem;
+    }
+
+    /* Book Cover Image */
+    .book-cover-section {
+        position: relative;
+        width: 100%;
+        height: 600px;
+        overflow: hidden;
+        background: linear-gradient(135deg, #e0e7ff, #f3e8ff);
+    }
+
+    .book-cover-img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        transition: transform 0.4s ease;
+    }
+
+    .book-post:hover .book-cover-img {
+        transform: scale(1.02);
+    }
+
+    /* Action Bar */
+    .action-bar {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        padding: 1.2rem 1.5rem;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .action-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        background: none;
+        border: none;
+        font-size: 1.1rem;
+        color: var(--text-dark);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        padding: 0.5rem 0.8rem;
+        border-radius: 8px;
+        font-weight: 600;
+    }
+
+    .action-btn:hover {
+        background: rgba(99, 102, 241, 0.1);
+        color: var(--primary-color);
+    }
+
+    .action-btn i {
+        font-size: 1.3rem;
+        transition: transform 0.3s ease;
+    }
+
+    .action-btn:hover i {
+        transform: scale(1.15);
+    }
+
+    /* Like Button Active State */
+    .action-btn.liked {
+        color: var(--like-color);
+    }
+
+    .action-btn.liked i {
+        animation: heartPulse 0.4s ease;
+    }
+
+    @keyframes heartPulse {
+        0%, 100% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.3);
+        }
+    }
+
+    /* Saved Button Active State */
+    .action-btn.saved {
+        color: var(--success-color);
+    }
+
+    .save-btn {
+        margin-left: auto;
+    }
+
+    /* Book Details */
+    .book-details {
+        padding: 1.5rem;
+    }
+
+    .book-title {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: var(--text-dark);
+        margin-bottom: 0.8rem;
+        line-height: 1.3;
+    }
+
+    .book-author {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-size: 1.1rem;
+        color: var(--text-medium);
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+
+    .book-author i {
+        color: var(--primary-color);
+    }
+
+    .book-description {
+        font-size: 1rem;
+        line-height: 1.7;
+        color: var(--text-dark);
+        margin-bottom: 1rem;
+    }
+
+    .book-description.collapsed {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .read-more-btn {
+        color: var(--primary-color);
+        font-weight: 600;
+        cursor: pointer;
+        background: none;
+        border: none;
+        font-size: 1rem;
+        padding: 0;
+        transition: color 0.3s ease;
+    }
+
+    .read-more-btn:hover {
+        color: var(--secondary-color);
+        text-decoration: underline;
+    }
+
+    .likes-count {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-dark);
+        margin-bottom: 0.8rem;
+    }
+
+    /* View PDF Button */
+    .view-pdf-section {
+        padding: 0 1.5rem 1.5rem;
+    }
+
+    .view-pdf-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.8rem;
+        width: 100%;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        padding: 1rem 2rem;
+        border: none;
+        border-radius: 12px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 6px 20px rgba(99, 102, 241, 0.3);
+    }
+
+    .view-pdf-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(99, 102, 241, 0.5);
+        background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    }
+
+    /* Comments Section */
+    .comments-section {
+        padding: 1.5rem;
+        border-top: 1px solid #f1f5f9;
+    }
+
+    .comments-header {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+    }
+
+    .comments-list {
+        max-height: 300px;
+        overflow-y: auto;
+        margin-bottom: 1rem;
+    }
+
+    .comment {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1rem;
+        padding: 1rem;
+        background: var(--bg-light);
+        border-radius: 12px;
+        animation: fadeInUp 0.4s ease-out;
+    }
+
+    .comment-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 2px solid var(--primary-color);
+        flex-shrink: 0;
+    }
+
+    .comment-content {
+        flex: 1;
+    }
+
+    .comment-author {
+        font-weight: 700;
+        color: var(--text-dark);
+        font-size: 0.95rem;
+        margin-bottom: 0.3rem;
+    }
+
+    .comment-text {
+        font-size: 0.95rem;
+        color: var(--text-medium);
+        line-height: 1.5;
+    }
+
+    .comment-time {
+        font-size: 0.8rem;
+        color: var(--text-light);
+        margin-top: 0.3rem;
+    }
+
+    /* Add Comment Form */
+    .add-comment-form {
+        display: flex;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+
+    .add-comment-form textarea {
+        flex: 1;
+        padding: 1rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 1rem;
+        resize: vertical;
+        min-height: 80px;
+        font-family: inherit;
+        transition: all 0.3s ease;
+    }
+
+    .add-comment-form textarea:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+    }
+
+    .submit-comment-btn {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        border: none;
+        padding: 1rem 1.5rem;
+        border-radius: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        white-space: nowrap;
+    }
+
+    .submit-comment-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: var(--text-medium);
+    }
+
+    .empty-state i {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+
+    /* Toast Notification */
+    .toast {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        background: var(--success-color);
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        font-weight: 600;
+        z-index: 1000;
+        animation: slideInUp 0.3s ease-out;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s, visibility 0.3s;
+    }
+
+    .toast.show {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .page-header {
+            margin-top: 100px;
+            padding: 0 1rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.2rem;
+        }
+
+        .page-header p {
+            font-size: 1rem;
+        }
+
+        .feed-container {
+            padding: 0 1rem;
+        }
+
+        .book-post {
+            margin-bottom: 2rem;
+            border-radius: 16px;
+        }
+
+        .book-cover-section {
+            height: 450px;
+        }
+
+        .book-title {
+            font-size: 1.5rem;
+        }
+
+        .action-bar {
+            gap: 1rem;
+        }
+
+        .action-btn {
+            font-size: 1rem;
+            padding: 0.4rem 0.6rem;
+        }
+
+        .action-btn i {
+            font-size: 1.2rem;
+        }
+
+        .add-comment-form {
+            flex-direction: column;
+        }
+
+        .submit-comment-btn {
+            width: 100%;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .page-header h1 {
+            font-size: 1.9rem;
+        }
+
+        .book-cover-section {
+            height: 380px;
+        }
+
+        .post-header {
+            padding: 1rem;
+        }
+
+        .user-avatar {
+            width: 42px;
+            height: 42px;
+        }
+
+        .book-details {
+            padding: 1rem;
+        }
+
+        .book-title {
+            font-size: 1.3rem;
+        }
+
+        .comments-section {
+            padding: 1rem;
+        }
+
+        .action-btn span {
+            display: none;
+        }
+
+        .toast {
+            bottom: 1rem;
+            right: 1rem;
+            left: 1rem;
+        }
+    }
 </style>
 
 <main>
@@ -42,6 +597,319 @@
         });
     });
 </script>
+
+
+      <div class="page-header">
+        <h1><i class="fas fa-book-open"></i> Community Books</h1>
+        <p>Discover amazing books published by our community members</p>
+    </div>
+
+    <div class="feed-container">
+        <% if (publicBooks && publicBooks.length > 0) { %>
+            <% publicBooks.forEach((book, index) => { %>
+                <%
+                    // FIXED: Proper comparison for Supabase
+                    let isLiked = false;
+                    let isSaved = false;
+                    
+                    if (user && book.likes && Array.isArray(book.likes)) {
+                        isLiked = book.likes.some(like => 
+                            like.userId && user.id && like.userId === user.id
+                        );
+                    }
+                    
+                    if (user && book.saves && Array.isArray(book.saves)) {
+                        isSaved = book.saves.some(save => 
+                            save.userId && user.id && save.userId === user.id
+                        );
+                    }
+                %>
+                <article class="book-post">
+                    <div class="post-header">
+                        <img src="<%= book.publisherAvatar %>" alt="<%= book.publisherUsername %>" class="user-avatar">
+                        <div class="user-info">
+                            <a href="/profile/<%= book.publisherUsername %>" class="username">@<%= book.publisherUsername %></a>
+                            <div class="publish-date">
+                                <i class="far fa-clock"></i>
+                                <span>Published <%= new Date(book.publicationDate).toLocaleDateString() %></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="book-cover-section">
+                        <img src="<%= book.coverImage %>" alt="<%= book.title %>" class="book-cover-img">
+                    </div>
+
+                    <div class="action-bar">
+                        <button class="action-btn like-btn <%= isLiked ? 'liked' : '' %>" data-book-id="<%= book._id %>">
+                            <i class="<%= isLiked ? 'fas' : 'far' %> fa-heart"></i>
+                            <span>Like</span>
+                        </button>
+                        <button class="action-btn comment-btn">
+                            <i class="far fa-comment"></i>
+                            <span>Comment</span>
+                        </button>
+                        <button class="action-btn share-btn" data-book-title="<%= book.title %>">
+                            <i class="far fa-share-square"></i>
+                            <span>Share</span>
+                        </button>
+                        <button class="action-btn save-btn <%= isSaved ? 'saved' : '' %>" data-book-id="<%= book._id %>">
+                            <i class="<%= isSaved ? 'fas' : 'far' %> fa-bookmark"></i>
+                            <span>Save</span>
+                        </button>
+                    </div>
+
+                    <div class="book-details">
+                        <div class="likes-count"><strong><%= book.likes ? book.likes.length : 0 %></strong> likes</div>
+                        <h2 class="book-title"><%= book.title %></h2>
+                        <div class="book-author">
+                            <i class="fas fa-pen-fancy"></i>
+                            <span><%= book.author %></span>
+                        </div>
+                        <div class="book-description collapsed" id="desc-<%= index %>">
+                            <%= book.description %>
+                        </div>
+                        <button class="read-more-btn" onclick="toggleDescription('desc-<%= index %>', this)">Read more</button>
+                    </div>
+
+                    <div class="view-pdf-section">
+                        <a href="<%= book.pdfLink %>" target="_blank" class="view-pdf-btn">
+                            <i class="fas fa-file-pdf"></i>
+                            View Full Book
+                        </a>
+                    </div>
+
+                    <div class="comments-section">
+                        <div class="comments-header">
+                            <i class="fas fa-comments"></i>
+                            Comments (<%= book.comments ? book.comments.length : 0 %>)
+                        </div>
+                        <div class="comments-list">
+                            <% if (book.comments && book.comments.length > 0) { %>
+                                <% book.comments.slice(-3).reverse().forEach(comment => { %>
+                                    <div class="comment">
+                                        <img src="<%= comment.userAvatar %>" alt="<%= comment.username %>" class="comment-avatar">
+                                        <div class="comment-content">
+                                            <div class="comment-author">@<%= comment.username %></div>
+                                            <div class="comment-text"><%= comment.text %></div>
+                                            <div class="comment-time"><%= new Date(comment.timestamp).toLocaleString() %></div>
+                                        </div>
+                                    </div>
+                                <% }) %>
+                            <% } %>
+                        </div>
+
+                        <% if (user) { %>
+                            <form class="add-comment-form" onsubmit="addComment(event, '<%= book._id %>')">
+                                <textarea placeholder="Write a comment..." name="comment" required></textarea>
+                                <button type="submit" class="submit-comment-btn">Post</button>
+                            </form>
+                        <% } else { %>
+                            <p style="text-align: center; color: var(--text-medium); padding: 1rem;">
+                                <a href="/signin" style="color: var(--primary-color); font-weight: 600;">Sign in</a> to comment
+                            </p>
+                        <% } %>
+                    </div>
+                </article>
+            <% }) %>
+        <% } else { %>
+            <div class="empty-state">
+                <i class="fas fa-book-open"></i>
+                <h3>No public books yet</h3>
+                <p>Be the first to publish a public book!</p>
+                <% if (user) { %>
+                    <a href="/publish" class="view-pdf-btn" style="margin-top: 1.5rem; display: inline-flex;">
+                        <i class="fas fa-plus-circle"></i>
+                        Publish Your First Book
+                    </a>
+                <% } %>
+            </div>
+        <% } %>
+    </div>
+</main>
+
+<div class="toast" id="toast">
+    <i class="fas fa-check-circle"></i>
+    <span id="toast-message">Action completed!</span>
+</div>
+
+<script>
+    function toggleDescription(id, btn) {
+        const desc = document.getElementById(id);
+        if (desc.classList.contains('collapsed')) {
+            desc.classList.remove('collapsed');
+            btn.textContent = 'Show less';
+        } else {
+            desc.classList.add('collapsed');
+            btn.textContent = 'Read more';
+        }
+    }
+
+    function showToast(message) {
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toast-message');
+        toastMessage.textContent = message;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    document.querySelectorAll('.like-btn').forEach(btn => {
+        btn.addEventListener('click', async function() {
+            <% if (!user) { %>
+                window.location.href = '/signin';
+                return;
+            <% } %>
+
+            const bookId = this.getAttribute('data-book-id');
+            const icon = this.querySelector('i');
+            const likesCountEl = this.closest('.book-post').querySelector('.likes-count strong');
+            
+            try {
+                const response = await fetch(`/api/books/${bookId}/like`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    if (data.liked) {
+                        this.classList.add('liked');
+                        icon.classList.remove('far');
+                        icon.classList.add('fas');
+                        showToast('Book liked! ❤️');
+                    } else {
+                        this.classList.remove('liked');
+                        icon.classList.remove('fas');
+                        icon.classList.add('far');
+                        showToast('Like removed');
+                    }
+                    // Update like count
+                    if (likesCountEl && data.likesCount !== undefined) {
+                        likesCountEl.textContent = data.likesCount;
+                    }
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showToast('Error liking book');
+            }
+        });
+    });
+
+    document.querySelectorAll('.save-btn').forEach(btn => {
+        btn.addEventListener('click', async function() {
+            <% if (!user) { %>
+                window.location.href = '/signin';
+                return;
+            <% } %>
+
+            const bookId = this.getAttribute('data-book-id');
+            const icon = this.querySelector('i');
+            
+            try {
+                const response = await fetch(`/api/books/${bookId}/save`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    if (data.saved) {
+                        this.classList.add('saved');
+                        icon.classList.remove('far');
+                        icon.classList.add('fas');
+                        showToast('Added to Reading List! 📚');
+                    } else {
+                        this.classList.remove('saved');
+                        icon.classList.remove('fas');
+                        icon.classList.add('far');
+                        showToast('Removed from Reading List');
+                    }
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showToast('Error saving book');
+            }
+        });
+    });
+
+    document.querySelectorAll('.share-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const bookTitle = this.getAttribute('data-book-title');
+            if (navigator.share) {
+                navigator.share({
+                    title: bookTitle,
+                    text: `Check out "${bookTitle}" on BookNote Hub`,
+                    url: window.location.href
+                }).then(() => showToast('Shared successfully! 🎉'));
+            } else {
+                navigator.clipboard.writeText(window.location.href);
+                showToast('Link copied to clipboard! 📋');
+            }
+        });
+    });
+
+    async function addComment(event, bookId) {
+        event.preventDefault();
+        const form = event.target;
+        const textarea = form.querySelector('textarea');
+        const commentText = textarea.value.trim();
+        
+        if (!commentText) return;
+        
+        try {
+            const response = await fetch(`/api/books/${bookId}/comment`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ comment: commentText })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                showToast('Comment posted! 💬');
+                textarea.value = '';
+                
+                const commentsList = form.previousElementSibling;
+                const commentsHeader = commentsList.previousElementSibling;
+                const newComment = document.createElement('div');
+                newComment.className = 'comment';
+                newComment.innerHTML = `
+                    <img src="${data.comment.userAvatar}" alt="${data.comment.username}" class="comment-avatar">
+                    <div class="comment-content">
+                        <div class="comment-author">@${data.comment.username}</div>
+                        <div class="comment-text">${data.comment.text}</div>
+                        <div class="comment-time">Just now</div>
+                    </div>
+                `;
+                commentsList.appendChild(newComment);
+                commentsList.scrollTop = commentsList.scrollHeight;
+                
+                // Update comment count
+                const countMatch = commentsHeader.textContent.match(/\((\d+)\)/);
+                if (countMatch) {
+                    const newCount = parseInt(countMatch[1]) + 1;
+                    commentsHeader.innerHTML = `<i class="fas fa-comments"></i> Comments (${newCount})`;
+                }
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            showToast('Error posting comment');
+        }
+    }
+
+    document.querySelectorAll('.comment-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const textarea = this.closest('.book-post').querySelector('.add-comment-form textarea');
+            if (textarea) {
+                textarea.focus();
+                textarea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        });
+    });
+</script>
+
 
 <section class="suggestions">
     <h2>Reading Suggestions</h2>
