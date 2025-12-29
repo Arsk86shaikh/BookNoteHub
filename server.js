@@ -23,14 +23,17 @@ const __dirname = path.dirname(__filename);
 // SUPABASE CONFIGURATION
 // ============================================================
 const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_ANON_KEY;
+// Use SERVICE_ROLE key for backend operations (bypasses RLS)
+const supabaseKey = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseKey) {
     console.error('❌ ERROR: Missing Supabase credentials!');
+    console.error('Set SUPABASE_URL and SUPABASE_SERVICE_KEY in .env file');
     process.exit(1);
 }
 
 console.log('✅ Supabase URL loaded:', supabaseUrl);
+console.log('✅ Using key type:', supabaseKey.startsWith('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9') ? 'SERVICE_ROLE' : 'ANON');
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // ============================================================
@@ -106,9 +109,9 @@ const upload = multer({
     storage,
     limits: { fileSize: 10 * 1024 * 1024 },
     fileFilter: (req, file, cb) => {
-        if (file.fieldname === 'coverImage') {
+        if (file.fieldname === 'coverImage' || file.fieldname === 'avatar') {
             if (!file.mimetype.startsWith('image/')) {
-                return cb(new Error('Only image files allowed for cover'));
+                return cb(new Error('Only image files allowed'));
             }
         }
         if (file.fieldname === 'pdfFile') {
@@ -140,7 +143,7 @@ function getDefaultAvatar(username) {
 // PUBLIC ROUTES
 // ============================================================
 
-// Home page - FIXED WITH PUBLIC BOOKS
+// Home page
 app.get('/', async (req, res) => {
     try {
         const user = req.session?.user || null;
@@ -148,7 +151,10 @@ app.get('/', async (req, res) => {
         // Fetch public books from Supabase
         const { data: publicBooksData, error } = await supabase
             .from('books')
-            .select('*, users!books_user_id_fkey(username, profile_image)')
+            .select(`
+                *,
+                users!books_user_id_fkey(username, profile_image)
+            `)
             .eq('is_public', true)
             .order('publication_date', { ascending: false })
             .limit(20);
@@ -157,7 +163,7 @@ app.get('/', async (req, res) => {
             console.error('❌ Error fetching public books:', error);
         }
 
-        // Transform the data to match the expected format
+        // Transform the data
         const publicBooks = (publicBooksData || []).map(book => ({
             _id: book.id,
             title: book.title,
@@ -201,7 +207,7 @@ const loadUserData = async (req, res, next) => {
         try {
             const { data: userData, error } = await supabase
                 .from('users')
-                .select('id, username, profile_image, email, bio, created_at')
+                .select('id, username, profile_image, email, bio, full_name, created_at')
                 .eq('id', req.session.user.id)
                 .single();
 
@@ -242,7 +248,7 @@ app.get('/profile', requireAuth, async (req, res) => {
             user: userData,
             totalBooks: totalBooks || 0,
             readingListCount: readingListCount || 0,
-            message: null
+            message: req.query.message || null
         });
     } catch (error) {
         console.error('Error loading profile:', error);
@@ -250,19 +256,25 @@ app.get('/profile', requireAuth, async (req, res) => {
             user,
             totalBooks: 0,
             readingListCount: 0,
-            message: { type: 'error', text: 'Failed to load profile data' }
+            message: 'Failed to load profile data'
         });
     }
 });
 
 app.post('/profile/update', requireAuth, async (req, res) => {
-    const { username, email, bio } = req.body;
+    const { username, email, bio, full_name } = req.body;
     const userId = req.session.user.id;
 
     try {
         const { data, error } = await supabase
             .from('users')
-            .update({ username, email, bio })
+            .update({ 
+                username, 
+                email, 
+                bio,
+                full_name,
+                updated_at: new Date().toISOString()
+            })
             .eq('id', userId)
             .select()
             .single();
@@ -270,10 +282,14 @@ app.post('/profile/update', requireAuth, async (req, res) => {
         if (error) throw error;
 
         req.session.user.username = username;
+        req.session.user.email = email;
+        req.session.user.bio = bio;
+        req.session.user.full_name = full_name;
+        
         res.redirect('/profile?message=Profile updated successfully');
     } catch (error) {
         console.error('Error updating profile:', error);
-        res.redirect('/profile?error=Failed to update profile');
+        res.redirect('/profile?message=Failed to update profile');
     }
 });
 
@@ -306,7 +322,10 @@ app.post('/profile/upload-avatar', requireAuth, upload.single('avatar'), async (
 
         const { error: updateError } = await supabase
             .from('users')
-            .update({ profile_image: publicUrl })
+            .update({ 
+                profile_image: publicUrl,
+                updated_at: new Date().toISOString()
+            })
             .eq('id', userId);
 
         if (updateError) throw updateError;
@@ -346,12 +365,26 @@ app.get('/logout', (req, res) => {
     });
 });
 
+// SIGNUP - Updated with proper validation
 app.post('/signup', async (req, res) => {
-    const { username, password, confirmPassword } = req.body;
+    const { username, email, password, confirmPassword } = req.body;
 
     try {
-        if (!username || !password || !confirmPassword) {
+        // Validation
+        if (!username || !email || !password || !confirmPassword) {
             return res.render('signup', { message: 'Please fill in all fields.' });
+        }
+
+        const trimmedUsername = username.trim();
+        const trimmedEmail = email.trim().toLowerCase();
+
+        if (trimmedUsername.length < 3) {
+            return res.render('signup', { message: 'Username must be at least 3 characters.' });
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(trimmedEmail)) {
+            return res.render('signup', { message: 'Please enter a valid email address.' });
         }
 
         if (password !== confirmPassword) {
@@ -362,37 +395,59 @@ app.post('/signup', async (req, res) => {
             return res.render('signup', { message: 'Password must be at least 6 characters.' });
         }
 
-        const { data: existingUser, error: checkError } = await supabase
+        // Check if username exists
+        const { data: existingUsername } = await supabase
             .from('users')
             .select('id')
-            .eq('username', username)
+            .eq('username', trimmedUsername)
             .maybeSingle();
 
-        if (existingUser) {
+        if (existingUsername) {
             return res.render('signup', { message: 'Username already exists.' });
+        }
+
+        // Check if email exists
+        const { data: existingEmail } = await supabase
+            .from('users')
+            .select('id')
+            .eq('email', trimmedEmail)
+            .maybeSingle();
+
+        if (existingEmail) {
+            return res.render('signup', { message: 'Email already registered.' });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
+        // Insert new user
         const { data: newUser, error: insertError } = await supabase
             .from('users')
             .insert([{ 
-                username: username.trim(), 
-                password: hashedPassword 
+                username: trimmedUsername, 
+                email: trimmedEmail,
+                password_hash: hashedPassword,
+                profile_image: getDefaultAvatar(trimmedUsername)
             }])
-            .select()
+            .select('id, username, email')
             .single();
 
-        if (insertError) throw insertError;
+        if (insertError) {
+            console.error('❌ Insert error:', insertError);
+            throw insertError;
+        }
 
+        console.log(`✅ New user created: ${trimmedUsername} (${trimmedEmail})`);
         return res.redirect('/signin?message=Account created! Please sign in.');
 
     } catch (error) {
         console.error('❌ Signup error:', error);
-        return res.render('signup', { message: 'Error creating account. Please try again.' });
+        return res.render('signup', { 
+            message: 'Error creating account. Please try again.' 
+        });
     }
 });
 
+// SIGNIN - Updated
 app.post('/signin', async (req, res) => {
     const { username, password } = req.body;
 
@@ -403,17 +458,20 @@ app.post('/signin', async (req, res) => {
 
         const { data: user, error } = await supabase
             .from('users')
-            .select('id, username, password, profile_image')
+            .select('id, username, password_hash, profile_image, email, full_name, bio')
             .eq('username', username)
             .maybeSingle();
 
-        if (error) throw error;
+        if (error) {
+            console.error('❌ Query error:', error);
+            throw error;
+        }
 
         if (!user) {
             return res.render('signin', { message: 'Invalid credentials.' });
         }
 
-        const isPasswordValid = await bcrypt.compare(password, user.password);
+        const isPasswordValid = await bcrypt.compare(password, user.password_hash);
         if (!isPasswordValid) {
             return res.render('signin', { message: 'Invalid credentials.' });
         }
@@ -421,8 +479,13 @@ app.post('/signin', async (req, res) => {
         req.session.user = { 
             id: user.id, 
             username: user.username,
+            email: user.email,
+            full_name: user.full_name,
+            bio: user.bio,
             profile_image: user.profile_image
         };
+        
+        console.log(`✅ User signed in: ${username}`);
         res.redirect('/');
 
     } catch (error) {
@@ -497,7 +560,6 @@ app.get('/publish', isAuthenticated, (req, res) => {
     res.render('publish', { message: null, success, user });
 });
 
-// UPDATED PUBLISH ROUTE WITH is_public FIELD
 app.post('/publish', requireAuth, upload.fields([
     { name: 'coverImage', maxCount: 1 },
     { name: 'pdfFile', maxCount: 1 }
@@ -523,13 +585,6 @@ app.post('/publish', requireAuth, upload.fields([
     try {
         const userId = req.session.user.id;
         const timestamp = Date.now();
-
-        // Get user data for publisher info
-        const { data: userData } = await supabase
-            .from('users')
-            .select('username, profile_image')
-            .eq('id', userId)
-            .single();
 
         // Upload cover image
         const coverImageFile = req.files.coverImage[0];
@@ -572,7 +627,7 @@ app.post('/publish', requireAuth, upload.fields([
         
         const pdfFileUrl = pdfUrlData.publicUrl;
 
-        // Insert book with is_public field
+        // Insert book
         const { error: dbError } = await supabase
             .from('books')
             .insert([{
@@ -583,7 +638,7 @@ app.post('/publish', requireAuth, upload.fields([
                 cover_image: coverImageUrl,
                 pdf_file: pdfFileUrl,
                 user_id: userId,
-                is_public: isPublic === 'on', // Convert checkbox to boolean
+                is_public: isPublic === 'on',
                 likes: [],
                 comments: [],
                 saves: [],
@@ -613,7 +668,6 @@ app.post('/publish', requireAuth, upload.fields([
 // API ROUTES FOR BOOK INTERACTIONS
 // ============================================================
 
-// Like a book
 app.post('/api/books/:bookId/like', requireAuth, async (req, res) => {
     try {
         const bookId = req.params.bookId;
@@ -659,7 +713,6 @@ app.post('/api/books/:bookId/like', requireAuth, async (req, res) => {
     }
 });
 
-// Save to reading list
 app.post('/api/books/:bookId/save', requireAuth, async (req, res) => {
     try {
         const bookId = req.params.bookId;
@@ -677,23 +730,19 @@ app.post('/api/books/:bookId/save', requireAuth, async (req, res) => {
         const saveIndex = saves.findIndex(save => save.userId === userId);
 
         if (saveIndex > -1) {
-            // Remove from saves
             saves.splice(saveIndex, 1);
             
-            // Remove from reading list
             await supabase
                 .from('read_list')
                 .delete()
                 .eq('user_id', userId)
                 .eq('book_id', bookId);
         } else {
-            // Add to saves
             saves.push({
                 userId: userId,
                 timestamp: new Date().toISOString()
             });
             
-            // Add to reading list
             await supabase
                 .from('read_list')
                 .insert([{
@@ -725,7 +774,6 @@ app.post('/api/books/:bookId/save', requireAuth, async (req, res) => {
     }
 });
 
-// Add comment
 app.post('/api/books/:bookId/comment', requireAuth, async (req, res) => {
     try {
         const bookId = req.params.bookId;
@@ -779,7 +827,6 @@ app.post('/api/books/:bookId/comment', requireAuth, async (req, res) => {
 // READING LIST ROUTES
 // ============================================================
 
-// GET reading list
 app.get('/readingList', requireAuth, async (req, res) => {
     const user = req.session.user;
 
@@ -809,7 +856,6 @@ app.get('/readingList', requireAuth, async (req, res) => {
     }
 });
 
-// POST - Add to reading list
 app.post('/readingList', requireAuth, async (req, res) => {
     let { bookId, title, author, coverImage, publishDate, description, pdfLink } = req.body;
 
@@ -841,42 +887,42 @@ app.post('/readingList', requireAuth, async (req, res) => {
     }
 });
 
-// POST - Remove from reading list (using book_id in URL parameter)
 app.post('/removeFromReadingList/:bookId/:userId', requireAuth, async (req, res) => {
     const bookId = req.params.bookId;
     const userId = req.params.userId;
     const sessionUserId = req.session.user.id;
 
-    // Security check: ensure the user can only delete their own books
     if (userId !== sessionUserId) {
         console.log('❌ Unauthorized attempt to delete book');
-        return res.status(403).send('Unauthorized: You can only remove books from your own reading list.');
+        return res.status(403).send('Unauthorized');
     }
 
-    const { error } = await supabase
-        .from('read_list')
-        .delete()
-        .eq('user_id', userId)
-        .eq('book_id', bookId);
+    try {
+        const { error } = await supabase
+            .from('read_list')
+            .delete()
+            .eq('user_id', userId)
+            .eq('book_id', bookId);
 
-    if (error) throw error;
+        if (error) throw error;
 
-    console.log('✅ Book removed from reading list. Book ID:', bookId, 'User ID:', userId);
-    res.redirect('/readingList');
+        console.log('✅ Book removed from reading list. Book ID:', bookId);
+        res.redirect('/readingList');
+    } catch (error) {
+        console.error('❌ Error removing book:', error);
+        res.status(500).send('Failed to remove book');
+    }
 });
 
-// POST - Remove from reading list by title (when book_id is null)
 app.post('/removeFromReadingListByTitle', requireAuth, async (req, res) => {
     const { title, userId } = req.body;
     const sessionUserId = req.session.user.id;
 
-    try {
-        // Security check: ensure the user can only delete their own books
-        if (userId !== sessionUserId) {
-            console.log('❌ Unauthorized attempt to delete book');
-            return res.status(403).send('Unauthorized: You can only remove books from your own reading list.');
-        }
+    if (userId !== sessionUserId) {
+        return res.status(403).send('Unauthorized');
+    }
 
+    try {
         const { error } = await supabase
             .from('read_list')
             .delete()
@@ -886,13 +932,14 @@ app.post('/removeFromReadingListByTitle', requireAuth, async (req, res) => {
 
         if (error) throw error;
 
-        console.log('✅ Book removed from reading list by title:', title, 'User ID:', userId);
+        console.log('✅ Book removed from reading list:', title);
         res.redirect('/readingList');
     } catch (err) {
-        console.error('❌ Error removing book by title:', err);
-        res.status(500).send('Failed to remove book from reading list.');
+        console.error('❌ Error removing book:', err);
+        res.status(500).send('Failed to remove book.');
     }
 });
+
 // Book search
 app.get('/books', async (req, res) => {
     const { title } = req.query;

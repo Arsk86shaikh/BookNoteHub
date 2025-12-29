@@ -3,7 +3,7 @@
     {
       "image": "https://i0.wp.com/www.roomsneedlove.com/wp-content/uploads/2023/10/how-to-keep-track-of-your-reading-life-pin.png?resize=768%2C1152&ssl=1",
       "title": "Track Your Reads",
-      "link":"https://book-note-hub.vercel.app/readingList"
+      "link":"/readingList"
     },
     {
       "image": "https://www.notebooksapp.com/wp-content/uploads/2022/08/PDF-iPad.png",
@@ -13,17 +13,17 @@
     {
       "image": "https://pagesunbound.wordpress.com/wp-content/uploads/2022/02/how-i-discover-new-books-1.png",
       "title": "Discover New Books",
-      "link":"https://book-note-hub.vercel.app/books"
+      "link":"/books"
     },
     {
       "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSkaUXeluaA0qmv4yW7rBND7Y2JqhFqqyAvQ&sg",
       "title": "Connect with Readers",
-      "link":"https://book-note-hub.vercel.app/readingList"
+      "link":"/readingList"
     },
     {
       "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6R1k0DvhwNTQXmA62kbrKURUEAzOX_21NbQ&s",
       "title": "Join Our Community",
-      "link":"https://book-note-hub.vercel.app/signin"
+      "link":"/signin"
     }
   ],
   "offerCards": [
@@ -31,20 +31,20 @@
       "image": "https://images-platform.99static.com//yuSx_KKiMQ21rsbTzDXYa8CH12s=/421x201:1442x1222/fit-in/500x500/99designs-contests-attachments/137/137626/attachment_137626031",
       "title": "Exclusive Deal for Existing Users",
       "description": "To not be Exit ",
-      "viewLink": "https://book-note-hub.vercel.app/books?title=seeing+what+invisible"
+      "viewLink": "/books?title=seeing+what+invisible"
     },
     {
       "image": "https://png.pngtree.com/png-clipart/20220404/original/pngtree-cover-design-for-business-brochure-png-image_7509348.png",
       "title": "Welcome Offer for New Users",
       "description": "Sign up today and get enjoy a Ne books !",
-      "viewLink": "https://book-note-hub.vercel.app/books?title=corporate+design"
+      "viewLink": "/books?title=corporate+design"
      
     },
     {
       "image": "https://designerpeople.com//wp-content/uploads/2020/02/negative-space-book-cover-design-ideas-2.jpg",
       "title": "Popular Reads at Special site",
       "description": "Enjoy discounts on our top-rated books.",
-      "viewLink": "https://book-note-hub.vercel.app/books?title=the+man+in+the+woods"
+      "viewLink": "/books?title=the+man+in+the+woods"
     }
   ],
   "suggestions": [
@@ -89,56 +89,56 @@
         "title": "The Pragmatic Programmer",
         "description": "Your journey to mastering software craftsmanship and problem-solving skills.",
         "image": "https://images-na.ssl-images-amazon.com/images/I/41as+WafrFL._SX376_BO1,204,203,200_.jpg",
-        "link": "https://book-note-hub.vercel.app/books?title=The+Pragmatic+Programmer"
+        "link": "/books?title=The+Pragmatic+Programmer"
       },
       {
         "id": 2,
         "title": "Clean Code",
         "description": "A handbook of agile software craftsmanship to write better code.",
         "image": "https://images-na.ssl-images-amazon.com/images/I/51b7XbfMIIL._SX374_BO1,204,203,200_.jpg",
-        "link": "https://book-note-hub.vercel.app/books?title=clean+code"
+        "link": "/books?title=clean+code"
       },
       {
         "id": 3,
         "title": "JavaScript: The Definitive Guide",
         "description": "Master the language of the web with this comprehensive JavaScript guide.",
         "image": "https://m.media-amazon.com/images/I/91hUer84PpL._SL1500_.jpg",
-        "link": "https://book-note-hub.vercel.app/books?title=javascript+%3A+The+definite+guide"
+        "link": "/books?title=javascript+%3A+The+definite+guide"
       },
       {
         "id": 4,
         "title": "Eloquent JavaScript",
         "description": "A modern introduction to programming with an emphasis on JavaScript.",
         "image": "https://eloquentjavascript.net/img/cover.jpg",
-        "link": "https://book-note-hub.vercel.app/books?title=eloquent+javascript"
+        "link": "/books?title=eloquent+javascript"
       },
       {
         "id": 5,
         "title": "Effective TypeScript",
         "description": "Learn TypeScript's advanced techniques and improve your JavaScript projects.",
         "image": "https://m.media-amazon.com/images/I/81sJB+PbfEL._SL1500_.jpg",
-        "link": "https://book-note-hub.vercel.app/books?title=typeScript"
+        "link": "/books?title=typeScript"
       },
       {
         "id": 6,
         "title": "Deep Learning with Python",
         "description": "Dive into deep learning and build powerful AI models with Python.",
         "image": "https://images.manning.com/360/480/resize/book/7/65fca1c-6826-472d-bbea-c1d4a7b3c570/Chollet-DLP-HI.png",
-        "link": "https://book-note-hub.vercel.app/books?title=Deep+Learning"
+        "link": "/books?title=Deep+Learning"
       },
       {
         "id": 7,
         "title": "Refactoring",
         "description": "Enhance your code's structure and readability through effective refactoring techniques.",
         "image": "https://martinfowler.com/books/refact2.jpg",
-        "link": "https://book-note-hub.vercel.app/books?title=Refactoring"
+        "link": "/books?title=Refactoring"
       },
       {
         "id": 8,
         "title": "The Art of Computer Programming",
         "description": "Dive deep into algorithms and computational theory.",
         "image": "https://m.media-amazon.com/images/I/61ndJx-40NL._SY466_.jpg",
-        "link": "https://book-note-hub.vercel.app/books?title=The+Art+of+the+computer+programming"
+        "link": "/books?title=The+Art+of+the+computer+programming"
       }
     ]
   

@@ -3,8 +3,8 @@
 
 <div class="profile-container">
     <% if (message) { %>
-        <div class="<%= message.type === 'success' ? 'success-message' : 'error-message' %>" id="alertMessage">
-            <%= message.text %>
+        <div class="success-message" id="alertMessage">
+            <%= message %>
         </div>
     <% } %>
 
@@ -90,6 +90,10 @@
                             <div class="info-value"><%= user.email || 'Not provided' %></div>
                         </div>
                         <div class="info-item">
+                            <div class="info-label">Full Name</div>
+                            <div class="info-value"><%= user.full_name || 'Not provided' %></div>
+                        </div>
+                        <div class="info-item">
                             <div class="info-label">Bio</div>
                             <div class="info-value"><%= user.bio || 'No bio yet' %></div>
                         </div>
@@ -105,6 +109,10 @@
                             <div class="info-label">Member Since</div>
                             <div class="info-value"><%= new Date(user.created_at).toLocaleDateString() %></div>
                         </div>
+                        <div class="info-item">
+                            <div class="info-label">Last Updated</div>
+                            <div class="info-value"><%= user.updated_at ? new Date(user.updated_at).toLocaleDateString() : 'N/A' %></div>
+                        </div>
                     </div>
                 </div>
 
@@ -112,14 +120,19 @@
                 <div class="edit-form-container" id="editFormContainer">
                     <form action="/profile/update" method="POST" class="edit-form">
                         <div class="form-group has-icon">
-                            <label for="username">Username</label>
-                            <input type="text" id="username" name="username" value="<%= user.username %>" required>
+                            <label for="username">Username *</label>
+                            <input type="text" id="username" name="username" value="<%= user.username %>" required minlength="3">
                             <i class="fas fa-user form-icon"></i>
                         </div>
                         <div class="form-group has-icon">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" name="email" value="<%= user.email || '' %>" placeholder="your@email.com">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" value="<%= user.email || '' %>" placeholder="your@email.com" required>
                             <i class="fas fa-envelope form-icon"></i>
+                        </div>
+                        <div class="form-group has-icon">
+                            <label for="full_name">Full Name</label>
+                            <input type="text" id="full_name" name="full_name" value="<%= user.full_name || '' %>" placeholder="Your full name">
+                            <i class="fas fa-id-card form-icon"></i>
                         </div>
                         <div class="form-group">
                             <label for="bio">Bio</label>
@@ -151,14 +164,12 @@
         const editBtnText = document.getElementById('editBtnText');
         
         if (editFormContainer.classList.contains('active')) {
-            // Switch to display mode
             editFormContainer.classList.remove('active');
             infoDisplay.classList.remove('hidden');
             editToggleBtn.classList.remove('cancel-btn');
             editBtnText.innerHTML = 'Edit Profile';
             editToggleBtn.querySelector('i').className = 'fas fa-edit';
         } else {
-            // Switch to edit mode
             editFormContainer.classList.add('active');
             infoDisplay.classList.add('hidden');
             editToggleBtn.classList.add('cancel-btn');
@@ -173,61 +184,70 @@
         const avatar = document.getElementById('profileAvatar');
         
         if (input.files && input.files[0]) {
-            // Check file size (max 5MB)
             if (input.files[0].size > 5 * 1024 * 1024) {
                 alert('File size must be less than 5MB');
+                input.value = '';
                 return;
             }
 
-            // Check file type
-            const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/jpg'];
             if (!allowedTypes.includes(input.files[0].type)) {
                 alert('Please upload a valid image file (JPEG, PNG, GIF, or WebP)');
+                input.value = '';
                 return;
             }
 
             const reader = new FileReader();
+            const originalSrc = avatar.src;
             
             reader.onload = function(e) {
-                // Update avatar preview immediately
                 avatar.src = e.target.result;
                 
-                // Create form data
                 const formData = new FormData();
                 formData.append('avatar', input.files[0]);
                 
-                // Show loading state
                 const uploadBtn = document.querySelector('.avatar-upload-btn');
+                const originalBtnContent = uploadBtn.innerHTML;
                 uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                uploadBtn.style.pointerEvents = 'none';
                 
-                // Upload to server
                 fetch('/profile/upload-avatar', {
                     method: 'POST',
                     body: formData
                 })
                 .then(response => response.json())
                 .then(data => {
-                    uploadBtn.innerHTML = '<i class="fas fa-camera"></i>';
+                    uploadBtn.innerHTML = originalBtnContent;
+                    uploadBtn.style.pointerEvents = 'auto';
                     
                     if (data.success) {
                         showNotification('Profile picture updated successfully!', 'success');
-                        // Reload page after 1.5 seconds to update header
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, 1500);
+                        avatar.src = data.url;
+                        
+                        const headerAvatar = document.querySelector('.user-avatar');
+                        if (headerAvatar) {
+                            headerAvatar.src = data.url;
+                        }
                     } else {
                         showNotification('Failed to upload image: ' + (data.message || 'Unknown error'), 'error');
-                        // Revert avatar on error
-                        avatar.src = '<%= user.profile_image || avatarSrc %>';
+                        avatar.src = originalSrc;
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    uploadBtn.innerHTML = '<i class="fas fa-camera"></i>';
+                    uploadBtn.innerHTML = originalBtnContent;
+                    uploadBtn.style.pointerEvents = 'auto';
                     showNotification('An error occurred. Please try again.', 'error');
-                    // Revert avatar on error
-                    avatar.src = '<%= user.profile_image || avatarSrc %>';
+                    avatar.src = originalSrc;
+                })
+                .finally(() => {
+                    input.value = '';
                 });
+            };
+            
+            reader.onerror = function() {
+                showNotification('Failed to read file', 'error');
+                input.value = '';
             };
             
             reader.readAsDataURL(input.files[0]);
@@ -236,26 +256,19 @@
 
     // Show Notification Function
     function showNotification(message, type) {
-        // Remove existing notification if any
         const existingNotification = document.getElementById('customNotification');
         if (existingNotification) {
             existingNotification.remove();
         }
 
-        // Create notification element
         const notification = document.createElement('div');
         notification.id = 'customNotification';
         notification.className = type === 'success' ? 'success-message' : 'error-message';
         notification.textContent = message;
-        notification.style.position = 'fixed';
-        notification.style.top = '100px';
-        notification.style.right = '20px';
-        notification.style.zIndex = '10000';
-        notification.style.maxWidth = '400px';
+        notification.style.cssText = 'position: fixed; top: 100px; right: 20px; z-index: 10000; max-width: 400px; animation: slideIn 0.3s ease-out;';
         
         document.body.appendChild(notification);
         
-        // Auto remove after 4 seconds
         setTimeout(() => {
             notification.style.animation = 'fadeOut 0.5s ease-out';
             setTimeout(() => {
@@ -264,20 +277,9 @@
         }, 4000);
     }
 
-    // Add fadeOut animation
+    // Add animations
     const style = document.createElement('style');
-    style.textContent = `
-        @keyframes fadeOut {
-            from {
-                opacity: 1;
-                transform: translateX(0);
-            }
-            to {
-                opacity: 0;
-                transform: translateX(20px);
-            }
-        }
-    `;
+    style.textContent = '@keyframes fadeOut { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(20px); } } @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }';
     document.head.appendChild(style);
 
     // Auto-hide alert message
@@ -297,12 +299,41 @@
     document.querySelector('.edit-form')?.addEventListener('submit', function(e) {
         const saveBtn = this.querySelector('.btn-primary');
         const spinner = document.getElementById('saveSpinner');
-        const btnText = saveBtn.querySelector('span:first-of-type');
+        const btnIcon = saveBtn.querySelector('i');
+        const btnTextSpan = saveBtn.querySelector('span:first-of-type');
+        
+        const username = document.getElementById('username').value.trim();
+        if (username.length < 3) {
+            e.preventDefault();
+            showNotification('Username must be at least 3 characters long', 'error');
+            return;
+        }
+        
+        const email = document.getElementById('email').value.trim();
+        if (!email || !email.includes('@')) {
+            e.preventDefault();
+            showNotification('Please enter a valid email address', 'error');
+            return;
+        }
         
         spinner.classList.add('active');
         saveBtn.disabled = true;
-        btnText.textContent = 'Saving...';
+        btnIcon.className = 'fas fa-spinner fa-spin';
+        btnTextSpan.textContent = 'Saving...';
     });
+
+    // Handle URL parameters for messages
+    const urlParams = new URLSearchParams(window.location.search);
+    const message = urlParams.get('message');
+    const error = urlParams.get('error');
+    
+    if (message) {
+        showNotification(message, 'success');
+        window.history.replaceState({}, document.title, window.location.pathname);
+    } else if (error) {
+        showNotification(error, 'error');
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
 </script>
 
 <%- include('footer') %>
